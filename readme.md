@@ -2,28 +2,28 @@
 
 ## Table of Content
 
-- [SVG Basic](https://github.com/Wangchimei/d3_data_visualization_study/tree/d3#svg-basic-%CE%B4)
-- [D3.js](https://github.com/Wangchimei/d3_data_visualization_study/tree/d3#d3js)
-  - [DOM Selection](https://github.com/Wangchimei/d3_data_visualization_study/tree/d3#dom-selection-%CE%B4)
-  - [DOM Manipulation](https://github.com/Wangchimei/d3_data_visualization_study/tree/d3#dom-manipulation-%CE%B4)
-  - [Method Chaining](https://github.com/Wangchimei/d3_data_visualization_study/tree/d3#method-chaining-%CE%B4)
-  - [Grouping](https://github.com/Wangchimei/d3_data_visualization_study/tree/d3#grouping-%CE%B4)
-  - [Function of Data](https://github.com/Wangchimei/d3_data_visualization_study/tree/d3#function-of-data-%CE%B4)
-    - [Solution for Using Arrow Functions](https://github.com/Wangchimei/d3_data_visualization_study/tree/d3#solution-for-using-arrow-functions)
-  - [Data Binding](https://github.com/Wangchimei/d3_data_visualization_study/tree/d3#data-binding-%CE%B4)
-  - [Data Loading](https://github.com/Wangchimei/d3_data_visualization_study/tree/d3#data-loading-%CE%B4)
+- [SVG Basic](https://github.com/Wangchimei/d3_data_visualization_study#svg-basic-%CE%B4)
+- [D3.js](https://github.com/Wangchimei/d3_data_visualization_study#d3js)
+  - [DOM Selection](https://github.com/Wangchimei/d3_data_visualization_study#dom-selection-%CE%B4)
+  - [DOM Manipulation](https://github.com/Wangchimei/d3_data_visualization_study#dom-manipulation-%CE%B4)
+  - [Method Chaining](https://github.com/Wangchimei/d3_data_visualization_study#method-chaining-%CE%B4)
+  - [Grouping](https://github.com/Wangchimei/d3_data_visualization_study#grouping-%CE%B4)
+  - [Function of Data](https://github.com/Wangchimei/d3_data_visualization_study#function-of-data-%CE%B4)
+    - [Solution for Using Arrow Functions](https://github.com/Wangchimei/d3_data_visualization_study#solution-for-using-arrow-functions)
+  - [Data Binding](https://github.com/Wangchimei/d3_data_visualization_study#data-binding-%CE%B4)
+  - [Data Loading](https://github.com/Wangchimei/d3_data_visualization_study#data-loading-%CE%B4)
 
 ## SVG Basic [&#916;](https://github.com/Wangchimei/javascript_advanced#table-of-content)
 
 ### SVG Shapes
 
-- [Rectangle](https://github.com/Wangchimei/d3_data_visualization_study/tree/d3#rectangle-%CE%B4) `<rect>`
-- [Circle](https://github.com/Wangchimei/d3_data_visualization_study/tree/d3#circle--ellipse-%CE%B4) `<circle>`
-- [Ellipse](https://github.com/Wangchimei/d3_data_visualization_study/tree/d3#circle--ellipse-%CE%B4) `<ellipse>`
-- [Line](https://github.com/Wangchimei/d3_data_visualization_study/tree/d3#line-%CE%B4) `<line>`
-- [Polygon](https://github.com/Wangchimei/d3_data_visualization_study/tree/d3#polygon--polyline-%CE%B4) `<polygon>`
-- [Polyline](https://github.com/Wangchimei/d3_data_visualization_study/tree/d3#polygon--polyline-%CE%B4) `<polyline>`
-- [Path](https://github.com/Wangchimei/d3_data_visualization_study/tree/d3#path-%CE%B4) `<path>`
+- [Rectangle](https://github.com/Wangchimei/d3_data_visualization_study#rectangle-%CE%B4) `<rect>`
+- [Circle](https://github.com/Wangchimei/d3_data_visualization_study#circle--ellipse-%CE%B4) `<circle>`
+- [Ellipse](https://github.com/Wangchimei/d3_data_visualization_study#circle--ellipse-%CE%B4) `<ellipse>`
+- [Line](https://github.com/Wangchimei/d3_data_visualization_study#line-%CE%B4) `<line>`
+- [Polygon](https://github.com/Wangchimei/d3_data_visualization_study#polygon--polyline-%CE%B4) `<polygon>`
+- [Polyline](https://github.com/Wangchimei/d3_data_visualization_study#polygon--polyline-%CE%B4) `<polyline>`
+- [Path](https://github.com/Wangchimei/d3_data_visualization_study#path-%CE%B4) `<path>`
 
 ### Rectangle [&#916;](https://github.com/Wangchimei/javascript_advanced#table-of-content)
 
