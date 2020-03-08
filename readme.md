@@ -127,3 +127,88 @@ The following commands are available for path data:
   - first set (`225 200`) - starting position of control point (i.e. starting position of the curve)
   - second set (`150 150`) - the end point of the control stick (dot in then middle)
   - third set (`150 50`) - the end point of the curve
+
+## D3.js
+
+### Select Elements
+
+Similar to using `querySelector` and `querySelector` in JavaScript, in D3 we use `select` and `selectAll` to select the placeholder entries from the DOM.
+
+```
+const canvas = d3.select('.canvas');
+```
+
+### Append the SVG Container and Assign Attributes
+
+First, appending a `<svg>` to the canvas element you selected previously.
+Then, you can do method chaining to define attributes and styles.
+
+- `append(tagName)` - Create and append new elements, returning a new selection of the created elements.
+- `attr(name,value)` - Transition an attribute to a value.
+- `style(name,value)` - Set a CSS style property for elements in the selection.
+
+```
+const svg = canvas
+  .append('svg')
+  .attr('width', 600)
+  .attr('height', 600);
+
+svg
+  .append('circle')
+  .attr('r', 50)
+  .attr('cx', 300)
+  .attr('cy', 70)
+  .attr('fill', 'pink');
+
+svg
+  .append('text')
+  .attr('x', 20)
+  .attr('y', 200)
+  .attr('fill', 'grey')
+  .text('hello, ninjas')
+  .style('font-family', 'arial');
+```
+
+### Grouping
+
+Grouping can be helpful if you are working with a more complex chart, or you would like to manipulate elements together.
+
+1. Append `<g>` after `<svg>`
+
+   ```
+   const svg = canvas
+     .append('svg')
+     .attr('width', 600)
+     .attr('height', 600);
+
+   const group = svg.append('g')
+   .attr('transform', 'translate(0, 100)');
+   ```
+
+2. Append shapes that you want to group after `<g>`
+
+   ```
+   group
+   .append('rect')
+   .attr('width', 200)
+   .attr('height', 100)
+   .attr('fill', 'blue')
+   .attr('x', 20)
+   .attr('y', 20);
+
+   group
+   .append('circle')
+   .attr('r', 50)
+   .attr('cx', 300)
+   .attr('cy', 70)
+   .attr('fill', 'pink');
+
+   svg
+   .append('text')
+   .attr('x', 20)
+   .attr('y', 200)
+   .attr('fill', 'grey')
+   .text('hello, ninjas')
+   .style('font-family', 'arial')
+   .attr('transform', 'translate(0, -100)');
+   ```
