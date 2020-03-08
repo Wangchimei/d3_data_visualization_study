@@ -1,18 +1,31 @@
 # Data Visualization with D3.js
 
-## SVG Basic
+## Table of Content
+
+- [SVG Basic](https://github.com/Wangchimei/d3_data_visualization_study/tree/d3#svg-basic-%CE%B4)
+- [D3.js](https://github.com/Wangchimei/d3_data_visualization_study/tree/d3#d3js)
+  - [DOM Selection](https://github.com/Wangchimei/d3_data_visualization_study/tree/d3#dom-selection-%CE%B4)
+  - [DOM Manipulation](https://github.com/Wangchimei/d3_data_visualization_study/tree/d3#dom-manipulation-%CE%B4)
+  - [Method Chaining](https://github.com/Wangchimei/d3_data_visualization_study/tree/d3#method-chaining-%CE%B4)
+  - [Grouping](https://github.com/Wangchimei/d3_data_visualization_study/tree/d3#grouping-%CE%B4)
+  - [Function of Data](https://github.com/Wangchimei/d3_data_visualization_study/tree/d3#function-of-data-%CE%B4)
+    - [Solution for Using Arrow Functions](https://github.com/Wangchimei/d3_data_visualization_study/tree/d3#solution-for-using-arrow-functions)
+  - [Data Binding](https://github.com/Wangchimei/d3_data_visualization_study/tree/d3#data-binding-%CE%B4)
+  - [Data Loading](https://github.com/Wangchimei/d3_data_visualization_study/tree/d3#data-loading-%CE%B4)
+
+## SVG Basic [&#916;](https://github.com/Wangchimei/javascript_advanced#table-of-content)
 
 ### SVG Shapes
 
-- Rectangle `<rect>`
-- Circle `<circle>`
-- Ellipse `<ellipse>`
-- Line `<line>`
-- Polygon `<polygon>`
-- Polyline `<polyline>`
-- Path `<path>`
+- [Rectangle](https://github.com/Wangchimei/d3_data_visualization_study/tree/d3#rectangle-%CE%B4) `<rect>`
+- [Circle](https://github.com/Wangchimei/d3_data_visualization_study/tree/d3#circle--ellipse-%CE%B4) `<circle>`
+- [Ellipse](https://github.com/Wangchimei/d3_data_visualization_study/tree/d3#circle--ellipse-%CE%B4) `<ellipse>`
+- [Line](https://github.com/Wangchimei/d3_data_visualization_study/tree/d3#line-%CE%B4) `<line>`
+- [Polygon](https://github.com/Wangchimei/d3_data_visualization_study/tree/d3#polygon--polyline-%CE%B4) `<polygon>`
+- [Polyline](https://github.com/Wangchimei/d3_data_visualization_study/tree/d3#polygon--polyline-%CE%B4) `<polyline>`
+- [Path](https://github.com/Wangchimei/d3_data_visualization_study/tree/d3#path-%CE%B4) `<path>`
 
-### Rectangle
+### Rectangle [&#916;](https://github.com/Wangchimei/javascript_advanced#table-of-content)
 
 <div align="center">
   <img src="https://i.imgur.com/ukw7MpG.png" height="100" />
@@ -34,7 +47,7 @@
 - `fill-opacity` defines the opacity of the fill color.
 - `stroke-opacity` defines the opacity of the stroke color.
 
-### Circle & Ellipse
+### Circle & Ellipse [&#916;](https://github.com/Wangchimei/javascript_advanced#table-of-content)
 
 <div align="center">
   <img src="https://i.imgur.com/GRRKttv.png" height="100" />
@@ -52,7 +65,7 @@
 
 - `cx` and `cy` define the x-axis coordinate of a center point.
 
-### Line
+### Line [&#916;](https://github.com/Wangchimei/javascript_advanced#table-of-content)
 
 <div align="center">
   <img src="https://i.imgur.com/JNj8yup.png" height="100" />
@@ -67,7 +80,7 @@
 - `x1` and `y1` defines the coordinate of the starting point.
 - `x2` and `y2` defines the coordinate of the end point.
 
-### Polygon & Polyline
+### Polygon & Polyline [&#916;](https://github.com/Wangchimei/javascript_advanced#table-of-content)
 
 `<polygon>` defines a closed shape as the last point is connected to the first point. (all the lines connect up)
 
@@ -87,7 +100,7 @@
 
 - `fill-rule` has tow values: `nonzero` and `evenodd`
 
-### Path
+### Path [&#916;](https://github.com/Wangchimei/javascript_advanced#table-of-content)
 
 `<path>` is the generic element to define a shape. All the basic shapes can be created with a path element.
 
@@ -130,7 +143,7 @@ The following commands are available for path data:
 
 ## D3.js
 
-### DOM Selection
+### DOM Selection [&#916;](https://github.com/Wangchimei/javascript_advanced#table-of-content)
 
 Similar to using `querySelector` and `querySelector` in JavaScript, D3 use `select` and `selectAll` to select the placeholder entries from the DOM.
 
@@ -143,7 +156,7 @@ Similar to using `querySelector` and `querySelector` in JavaScript, D3 use `sele
 const canvas = d3.select('.canvas');
 ```
 
-### DOM Manipulation
+### DOM Manipulation [&#916;](https://github.com/Wangchimei/javascript_advanced#table-of-content)
 
 DOM manipulation methods can be uses after selecting elements using `d3.select()` or `d3.selectAll()`.
 
@@ -158,7 +171,7 @@ DOM manipulation methods can be uses after selecting elements using `d3.select()
 | text(_content_)               | Gets or sets the text of the selected element                   | d3.select("p").text("Hello!")                         |
 | html(_content_)               | Gets or sets the inner HTML of selected element                 | d3.select("p").html("<span>Hello!</span>");           |
 
-### Method Chaining
+### Method Chaining [&#916;](https://github.com/Wangchimei/javascript_advanced#table-of-content)
 
 ```
 const canvas = d3.select('.canvas');
@@ -184,7 +197,7 @@ svg
   .style('font-family', 'arial');
 ```
 
-### Grouping
+### Grouping [&#916;](https://github.com/Wangchimei/javascript_advanced#table-of-content)
 
 Grouping can be helpful if you are working with a more complex chart, or you would like to manipulate elements together.
 
@@ -227,7 +240,7 @@ Grouping can be helpful if you are working with a more complex chart, or you wou
    .style('font-family', 'arial')
    ```
 
-### Function of Data
+### Function of Data [&#916;](https://github.com/Wangchimei/javascript_advanced#table-of-content)
 
 DOM manipulation methods as append(), style(), attr() etc. can take in a constant **value** or a **function** as a parameter.
 
@@ -297,7 +310,7 @@ In arrow functions, the value of `n[i]` will equal to `this` in regular function
 - **use `this` keyword in regular functions**
 - **use `n[i]` in arrow functions**
 
-## Data Binding
+## Data Binding [&#916;](https://github.com/Wangchimei/javascript_advanced#table-of-content)
 
 | Method  | Description                                                                               |
 | :------ | :---------------------------------------------------------------------------------------- |
@@ -329,7 +342,7 @@ The output of `enter()` can be fed to `append()` method.
   <img src="https://i.imgur.com/IYdFDEA.png" height="300"/>
 </div>
 
-### Data Loading
+### Data Loading [&#916;](https://github.com/Wangchimei/javascript_advanced#table-of-content)
 
 D3 can handle different types of data defined either locally in variables or from external files.
 
@@ -341,7 +354,23 @@ The following methods will sends http request to the specified url to load data 
 - d3.xml()
 
 ```
-d3.json("/data/users.json", function(data) {
-    console.log(data);
-});
+d3.json('./circles.json').then(data => {
+  const circles = svg.selectAll('circle').data(data);
+
+  // add attrs to circle already in the DOM
+  circles
+    .attr('cy', 200)
+    .attr('cx', d => d.distance)
+    .attr('r', d => d.radius)
+    .attr('fill', d => d.fill);
+
+  // append the enter selection to the DOM
+  circles
+    .enter()
+    .append('circle')
+    .attr('cy', 200)
+    .attr('cx', d => d.distance)
+    .attr('r', d => d.radius)
+    .attr('fill', d => d.fill);
+}).catch(error => alert('cannot fetch data'));
 ```
