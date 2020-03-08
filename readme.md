@@ -14,7 +14,7 @@
 
 ### Rectangle
 
-<div style="text-align:center;">
+<div align="center">
   <img src="https://i.imgur.com/ukw7MpG.png" height="100" />
 </div>
 
@@ -36,7 +36,7 @@
 
 ### Circle & Ellipse
 
-<div style="text-align:center;">
+<div align="center">
   <img src="https://i.imgur.com/GRRKttv.png" height="100" />
 </div>
 
@@ -54,7 +54,7 @@
 
 ### Line
 
-<div style="text-align:center;">
+<div align="center">
   <img src="https://i.imgur.com/JNj8yup.png" height="100" />
 </div>
 
@@ -73,7 +73,7 @@
 
 `<polyline>` defines a open shape as the last point doesn't have to be connected to the first point.
 
-<div style="text-align:center;">
+<div align="center">
   <img src="https://i.imgur.com/8tKYiNK.png" height="150" />
 </div>
 
@@ -106,7 +106,7 @@ The following commands are available for path data:
 
   **Note:** Commands above can also be expressed with lower letters. Capital letters means _absolutely positioned_, lower cases means _relatively positioned_.
 
-<div style="text-align:center;">
+<div align="center">
   <img src="https://i.imgur.com/W4dWtlk.png" height="150"/>
 </div>
 
@@ -325,6 +325,6 @@ The `enter()` method dynamically creates elements to the number of data values.
 The output of `enter()` can be fed to `append()` method.  
 `append()` will then create DOM elements for which there are no corresponding DOM elements on the page.
 
-<div style="text-align:center;">
-  <img src="https://i.imgur.com/IYdFDEA.png" width="350" height="200"/>
+<div align="center">
+  <img src="https://i.imgur.com/IYdFDEA.png" height="300"/>
 </div>
