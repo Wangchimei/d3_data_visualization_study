@@ -14,7 +14,9 @@
 
 ### Rectangle
 
-![Rectangle](https://i.imgur.com/ukw7MpG.png)
+<div style="text-align:center;">
+  <img src="https://i.imgur.com/ukw7MpG.png" height="100" />
+</div>
 
 ```
  <svg width="400" height="50">
@@ -34,7 +36,9 @@
 
 ### Circle & Ellipse
 
-![Circle & Ellipse](https://i.imgur.com/GRRKttv.png)
+<div style="text-align:center;">
+  <img src="https://i.imgur.com/GRRKttv.png" height="100" />
+</div>
 
 ```
 <svg width="400" height="50">
@@ -50,7 +54,9 @@
 
 ### Line
 
-![Line](https://i.imgur.com/JNj8yup.png)
+<div style="text-align:center;">
+  <img src="https://i.imgur.com/JNj8yup.png" height="100" />
+</div>
 
 ```
 <svg width="400" height="50">
@@ -67,7 +73,9 @@
 
 `<polyline>` defines a open shape as the last point doesn't have to be connected to the first point.
 
-![Polygon & Polyline](https://i.imgur.com/8tKYiNK.png)
+<div style="text-align:center;">
+  <img src="https://i.imgur.com/8tKYiNK.png" height="150" />
+</div>
 
 ```
 <svg width="450" height="230">
@@ -98,7 +106,9 @@ The following commands are available for path data:
 
   **Note:** Commands above can also be expressed with lower letters. Capital letters means _absolutely positioned_, lower cases means _relatively positioned_.
 
-![Path](https://i.imgur.com/W4dWtlk.png)
+<div style="text-align:center;">
+  <img src="https://i.imgur.com/W4dWtlk.png" height="150"/>
+</div>
 
 ```
 <svg width="450" height="230">
