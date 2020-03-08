@@ -246,7 +246,7 @@ svg
   .attr('fill', function(d) { return d.fill; });
 ```
 
-Other than the data (or `d`) parameter, there are two other parameters (`i` and `n`)available to us.
+Other than the data (or `d`) parameter, there are two other parameters (`i` and `n`) available to us.
 
 ```
 const svg = d3.select('svg');
@@ -296,3 +296,35 @@ In arrow functions, the value of `n[i]` will equal to `this` in regular function
 
 - **use `this` keyword in regular functions**
 - **use `n[i]` in arrow functions**
+
+## Data Binding
+
+| Method  | Description                                                                               |
+| :------ | :---------------------------------------------------------------------------------------- |
+| data()  | Joins data to the selected elements                                                       |
+| enter() | Creates a selection with placeholder references for missing elements                      |
+| exit()  | Removes nodes and adds them to the exit selection which can be later removed from the DOM |
+| datum() | Injects data to the selected element without computing a join.                            |
+
+#### `data()` & `enter()`
+
+`data()` function is used to join the specified array of data to the selected DOM elements and return the updated selection.
+
+Two types of value can be passing in
+
+- an array of values (number or object)
+- a function of data.
+
+  **Note:** It does not do anything if a constant value is provided.
+
+The `data()` function binds our data array to the selection.  
+However, in a scenario that there are only 1 elements in the DOM, but 3 data elements in the array.  
+Only the first data element bound to the one available element. Rest of the data elements from the array were being processed to "enter selection".
+
+The `enter()` method dynamically creates elements to the number of data values.  
+The output of `enter()` can be fed to `append()` method.  
+`append()` will then create DOM elements for which there are no corresponding DOM elements on the page.
+
+<div style="text-align:center;">
+  <img src="https://i.imgur.com/IYdFDEA.png" width="350" height="200"/>
+</div>
