@@ -450,3 +450,70 @@ d3.json('./circles.json')
   })
   .catch(error => alert('cannot fetch data'));
 ```
+
+### Scales
+
+Added scaling factors is to ensure that our shapes are visible on the screen, because some data values may be too large while others too small.
+
+Using scale allows to map our data values to values that would be better represented in visualizations.
+
+#### Terminology: Domain and Range
+
+- **Domain**
+
+  Domain denotes minimum and maximum values of your input data.
+
+- **Range**
+  Range is the output range that you would like your input values to map to.
+
+#### Linear Scale and Band Scale
+
+**Linear scale** takes in the values in the original data and split out a different value based on how much vertical space is available.
+
+**Band scale** splits the data into bands of equal width depending on how many different elements in the original data and how much horizontal space is available
+
+<div align="center">
+  <img src="https://i.imgur.com/aa2Rp8x.png" height="300"/>
+</div>
+
+```js
+const svg = d3.select('svg');
+
+d3.json('./menu.json').then(data => {
+  // band scale
+  const x = d3
+    .scaleBand()
+    .domain(data.map(item => item.name))
+    .range([0, 600])
+    .paddingInner(0.2)
+    .paddingOuter(0.2);
+
+  // linear scale
+  const extent = d3.extent(data, d => d.orders);
+  const y = d3
+    .scaleLinear()
+    .domain(extent)
+    .range([50, 500]);
+
+  const rects = svg.selectAll('rect').data(data);
+  // add attrs to existing element in the DOM
+  rects
+    .attr('width', x.bandwidth())
+    .attr('height', d => y(d.orders))
+    .attr('fill', 'blue')
+    .attr('x', d => x(d.name));
+
+  // append the enter selection to the DOM
+  rects
+    .enter()
+    .append('rect')
+    .attr('width', x.bandwidth())
+    .attr('height', d => y(d.orders))
+    .attr('fill', 'blue')
+    .attr('x', d => x(d.name));
+});
+```
+
+- `d3.min(data, d => d.orders)` return the minimum
+- `d3.max(data, d => d.orders)` return the maximum
+- `d3.extent(data, d => d.orders)` return `[min, max]`
