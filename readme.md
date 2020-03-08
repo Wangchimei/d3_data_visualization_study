@@ -328,3 +328,20 @@ The output of `enter()` can be fed to `append()` method.
 <div align="center">
   <img src="https://i.imgur.com/IYdFDEA.png" height="300"/>
 </div>
+
+### Data Loading
+
+D3 can handle different types of data defined either locally in variables or from external files.
+
+The following methods will sends http request to the specified url to load data file, return a promise, and executes callback function.
+
+- d3.csv()
+- d3.json()
+- d3.tsv()
+- d3.xml()
+
+```
+d3.json("/data/users.json", function(data) {
+    console.log(data);
+});
+```
