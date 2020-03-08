@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SVG</title>
+    <style>
+      svg {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Rectangle</h2>
+    <svg width="400" height="50">
+      <rect
+        x="100"
+        y="10"
+        fill="lightskyblue"
+        width="100"
+        height="30"
+        stroke="black"
+        stroke-width="2"
+      ></rect>
+      <rect
+        x="250"
+        y="10"
+        rx="20"
+        ry="20"
+        fill="peachpuff"
+        width="100"
+        height="30"
+        stroke="black"
+        stroke-width="2"
+        opacity="0.7"
+      ></rect>
+    </svg>
+
+    <h2>Circle & Ellipse</h2>
+    <svg width="400" height="50">
+      <circle
+        cx="100"
+        cy="25"
+        r="20"
+        stroke="black"
+        stroke-width="2"
+        fill="lightskyblue"
+      ></circle>
+      <circle
+        cx="200"
+        cy="50"
+        r="40"
+        stroke="black"
+        stroke-width="2"
+        fill="peachpuff"
+      ></circle>
+      <ellipse
+        cx="320"
+        cy="25"
+        rx="50"
+        ry="20"
+        stroke="black"
+        stroke-width="2"
+        fill="turquoise"
+      ></ellipse>
+    </svg>
+
+    <h2>Line</h2>
+    <svg width="400" height="50">
+      <line
+        x1="100"
+        y1="10"
+        x2="300"
+        y2="30"
+        stroke="black"
+        stroke-width="4"
+      ></line>
+    </svg>
+
+    <h2>Polygon & Polyline</h2>
+    <svg width="450" height="230">
+      <polygon
+        points="100,20 40,198 190,78 10,78 160,198"
+        fill="lightskyblue"
+        stroke="black"
+        stroke-width="2"
+        fill-rule="nonzero"
+      ></polygon>
+      <polyline
+        points="250,40 290,40 290,80 330,80 330,120 370,120 370,160 410,160 410,200"
+        fill="none"
+        stroke="peachpuff"
+        stroke-width="4"
+      ></polyline>
+    </svg>
+
+    <h2>Path</h2>
+    <svg width="450" height="230">
+      <path d="M 150 50 L 75 200 L 225 200 Z" fill="lightskyblue" />
+    </svg>
+
+    <svg width="450" height="230">
+      <path
+        d="M 150 50 L 75 200 L 225 200 C 225 200 150 150 150 50"
+        fill="lightskyblue"
+      />
+      <circle cx="150" cy="150" r="5" fill="darkslategrey"></circle>
+      <line
+        x1="225"
+        y1="200"
+        x2="150"
+        y2="150"
+        stroke="darkslategrey"
+        stroke-width="1"
+      ></line>
+    </svg>
+  </body>
+</html>
