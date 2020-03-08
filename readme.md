@@ -130,24 +130,39 @@ The following commands are available for path data:
 
 ## D3.js
 
-### Select Elements
+### DOM Selection
 
-Similar to using `querySelector` and `querySelector` in JavaScript, in D3 we use `select` and `selectAll` to select the placeholder entries from the DOM.
+Similar to using `querySelector` and `querySelector` in JavaScript, D3 use `select` and `selectAll` to select the placeholder entries from the DOM.
+
+| Method                     | Description                                             |
+| :------------------------- | :------------------------------------------------------ |
+| d3.select(css-selector)    | Returns the first matching element in the HTML document |
+| d3.selectAll(css-selector) | Returns all the matching elements in the HTML document  |
 
 ```
 const canvas = d3.select('.canvas');
 ```
 
-### Append the SVG Container and Assign Attributes
+### DOM Manipulation
 
-First, appending a `<svg>` to the canvas element you selected previously.
-Then, you can do method chaining to define attributes and styles.
+DOM manipulation methods can be uses after selecting elements using `d3.select()` or `d3.selectAll()`.
 
-- `append(tagName)` - Create and append new elements, returning a new selection of the created elements.
-- `attr(name,value)` - Transition an attribute to a value.
-- `style(name,value)` - Set a CSS style property for elements in the selection.
+| Method                        | Description                                                     | Example                                               |
+| :---------------------------- | :-------------------------------------------------------------- | :---------------------------------------------------- |
+| append(_element name_)        | Creates and adds an element after(inside) the selected element. | d3.select('.canvas').append('svg')                    |
+| attr(_name_, _value_)         | Gets or sets an attribute on the selected element.              | d3.select('.canvas').append('svg').attr('width', 600) |
+| style(_name_, _value_)        | Gets or sets the style of the selected element.                 | d3.select("p").style("color", "red")                  |
+| classed(_css class_, boolean) | Gets, adds or removes a css class from the selection.           | d3.select("p").classed('error', true);                |
+| property(_name_, _value_)     | Gets or sets an attribute on the selected element.              | d3.select("input").property("checked",true);          |
+| remove()                      | Removes the specified element from the DOM                      | d3.select("p").remove();                              |
+| text(_content_)               | Gets or sets the text of the selected element                   | d3.select("p").text("Hello!")                         |
+| html(_content_)               | Gets or sets the inner HTML of selected element                 | d3.select("p").html("<span>Hello!</span>");           |
+
+### Method Chaining
 
 ```
+const canvas = d3.select('.canvas');
+
 const svg = canvas
   .append('svg')
   .attr('width', 600)
@@ -210,5 +225,74 @@ Grouping can be helpful if you are working with a more complex chart, or you wou
    .attr('fill', 'grey')
    .text('hello, ninjas')
    .style('font-family', 'arial')
-   .attr('transform', 'translate(0, -100)');
    ```
+
+### Function of Data
+
+DOM manipulation methods as append(), style(), attr() etc. can take in a constant **value** or a **function** as a parameter.
+
+**Example**  
+Putting data before attr() makes sure you can access data in the DOM manipulation methods.
+
+```
+const svg = d3.select('svg');
+const data = [{ width: 200, height: 100, fill: 'blue' }];
+
+svg
+  .select('rect')
+  .data(d)
+  .attr('width', function(d) { return data.width; })
+  .attr('height', function(d) { return d.height; })
+  .attr('fill', function(d) { return d.fill; });
+```
+
+Other than the data (or `d`) parameter, there are two other parameters (`i` and `n`)available to us.
+
+```
+const svg = d3.select('svg');
+const data = [{ width: 200, height: 100, fill: 'blue' }];
+
+svg
+  .select('rect')
+  .data(d, i, n)
+  .attr('width', function(d, i, n) {
+    console.log(d);    // { width: 200, height: 100, fill: 'blue' }
+    console.log(i);    //  0
+    console.log(n);    // [rect]
+    return d.width;
+  })
+```
+
+- `d` represents data
+- `i` is the index of the current element inside the array
+- `n` is the current selection in the array of elements, which results from `svg.select('rect')`
+
+#### Solution for Using Arrow Functions
+
+For the most part, using a regular function and an arrow function in D3 will work in the same way. (as below)  
+However, there is one difference. The value of `this` keyword inside the function is going to be different in each case.
+
+```
+svg
+  .select('rect')
+  .data(data)
+  .attr('width', (d, i, n) => {
+    return d.width;
+  })
+  .attr('height', function(d, i, n) {
+    return d.height;
+  });
+```
+
+When using the function keyword `function(d, i, n) {return d.height;}`, the value of `this` is referencing the actual selection (`<rect width="200" height="100" fill="purple"></rect>`).
+
+When using the arrow function `(d, i, n) => {return d.width;}`, the value of `this` is `window`.
+
+To combat this, we can use the other two parameters (`i` and `n`).  
+In arrow functions, the value of `n[i]` will equal to `this` in regular functions.  
+`n[i]` means the first item (index 0) in the array of element (selected from `svg.select('rect')`).
+
+**Therefore, to grab the current element,**
+
+- **use `this` keyword in regular functions**
+- **use `n[i]` in arrow functions**
