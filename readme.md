@@ -31,10 +31,29 @@
   <img src="https://i.imgur.com/ukw7MpG.png" height="100" />
 </div>
 
-```
- <svg width="400" height="50">
-  <rect x="100" y="10" fill="lightskyblue" width="100" height="30" stroke="black" stroke-width="2"></rect>
-  <rect x="250" y="10" rx="20" ry="20" fill="peachpuff" width="100" height="30" stroke="black" stroke-width="2" opacity="0.7"></rect>
+```html
+<svg width="400" height="50">
+  <rect
+    x="100"
+    y="10"
+    fill="lightskyblue"
+    width="100"
+    height="30"
+    stroke="black"
+    stroke-width="2"
+  ></rect>
+  <rect
+    x="250"
+    y="10"
+    rx="20"
+    ry="20"
+    fill="peachpuff"
+    width="100"
+    height="30"
+    stroke="black"
+    stroke-width="2"
+    opacity="0.7"
+  ></rect>
 </svg>
 ```
 
@@ -53,13 +72,35 @@
   <img src="https://i.imgur.com/GRRKttv.png" height="100" />
 </div>
 
-```
+```html
 <svg width="400" height="50">
-  <circle cx="100" cy="20" r="20" stroke="black" stroke-width="2" fill="lightskyblue"></circle>
+  <circle
+    cx="100"
+    cy="20"
+    r="20"
+    stroke="black"
+    stroke-width="2"
+    fill="lightskyblue"
+  ></circle>
 
-  <circle cx="200" cy="50" r="40" stroke="black" stroke-width="2" fill="peachpuff"></circle>
+  <circle
+    cx="200"
+    cy="50"
+    r="40"
+    stroke="black"
+    stroke-width="2"
+    fill="peachpuff"
+  ></circle>
 
-  <ellipse cx="320" cy="20" rx="50" ry="20" stroke="black" stroke-width="2" fill="turquoise"></ellipse>
+  <ellipse
+    cx="320"
+    cy="20"
+    rx="50"
+    ry="20"
+    stroke="black"
+    stroke-width="2"
+    fill="turquoise"
+  ></ellipse>
 </svg>
 ```
 
@@ -71,9 +112,16 @@
   <img src="https://i.imgur.com/JNj8yup.png" height="100" />
 </div>
 
-```
+```html
 <svg width="400" height="50">
-  <line x1="100" y1="10" x2="300" y2="30" stroke="black" stroke-width="4"></line>
+  <line
+    x1="100"
+    y1="10"
+    x2="300"
+    y2="30"
+    stroke="black"
+    stroke-width="4"
+  ></line>
 </svg>
 ```
 
@@ -90,11 +138,22 @@
   <img src="https://i.imgur.com/8tKYiNK.png" height="150" />
 </div>
 
-```
+```html
 <svg width="450" height="230">
-  <polygon points="100,20 40,198 190,78 10,78 160,198" fill="lightskyblue" stroke="black" stroke-width="2" fill-rule="nonzero"></polygon>
+  <polygon
+    points="100,20 40,198 190,78 10,78 160,198"
+    fill="lightskyblue"
+    stroke="black"
+    stroke-width="2"
+    fill-rule="nonzero"
+  ></polygon>
 
-  <polyline points="250,40 290,40 290,80 330,80 330,120 370,120 370,160 410,160 410,200" fill="none" stroke="peachpuff" stroke-width="4"></polyline>
+  <polyline
+    points="250,40 290,40 290,80 330,80 330,120 370,120 370,160 410,160 410,200"
+    fill="none"
+    stroke="peachpuff"
+    stroke-width="4"
+  ></polyline>
 </svg>
 ```
 
@@ -123,12 +182,22 @@ The following commands are available for path data:
   <img src="https://i.imgur.com/W4dWtlk.png" height="150"/>
 </div>
 
-```
+```html
 <svg width="450" height="230">
-  <path d="M 150 50 L 75 200 L 225 200 C 225 200 150 150 150 50" fill="lightskyblue" />
+  <path
+    d="M 150 50 L 75 200 L 225 200 C 225 200 150 150 150 50"
+    fill="lightskyblue"
+  />
 
   <circle cx="150" cy="150" r="5" fill="darkslategrey"></circle>
-  <line x1="225" y1="200" x2="150" y2="150" stroke="darkslategrey" stroke-width="1"></line>
+  <line
+    x1="225"
+    y1="200"
+    x2="150"
+    y2="150"
+    stroke="darkslategrey"
+    stroke-width="1"
+  ></line>
 </svg>
 ```
 
@@ -173,7 +242,7 @@ DOM manipulation methods can be uses after selecting elements using `d3.select()
 
 ### Method Chaining [&#916;](https://github.com/Wangchimei/d3_data_visualization_study#table-of-content)
 
-```
+```js
 const canvas = d3.select('.canvas');
 
 const svg = canvas
@@ -203,41 +272,40 @@ Grouping can be helpful if you are working with a more complex chart, or you wou
 
 1. Append `<g>` after `<svg>`
 
-   ```
+   ```js
    const svg = canvas
      .append('svg')
      .attr('width', 600)
      .attr('height', 600);
 
-   const group = svg.append('g')
-   .attr('transform', 'translate(0, 100)');
+   const group = svg.append('g').attr('transform', 'translate(0, 100)');
    ```
 
 2. Append shapes that you want to group after `<g>`
 
-   ```
+   ```js
    group
-   .append('rect')
-   .attr('width', 200)
-   .attr('height', 100)
-   .attr('fill', 'blue')
-   .attr('x', 20)
-   .attr('y', 20);
+     .append('rect')
+     .attr('width', 200)
+     .attr('height', 100)
+     .attr('fill', 'blue')
+     .attr('x', 20)
+     .attr('y', 20);
 
    group
-   .append('circle')
-   .attr('r', 50)
-   .attr('cx', 300)
-   .attr('cy', 70)
-   .attr('fill', 'pink');
+     .append('circle')
+     .attr('r', 50)
+     .attr('cx', 300)
+     .attr('cy', 70)
+     .attr('fill', 'pink');
 
    svg
-   .append('text')
-   .attr('x', 20)
-   .attr('y', 200)
-   .attr('fill', 'grey')
-   .text('hello, ninjas')
-   .style('font-family', 'arial')
+     .append('text')
+     .attr('x', 20)
+     .attr('y', 200)
+     .attr('fill', 'grey')
+     .text('hello, ninjas')
+     .style('font-family', 'arial');
    ```
 
 ### Function of Data [&#916;](https://github.com/Wangchimei/d3_data_visualization_study#table-of-content)
@@ -247,21 +315,27 @@ DOM manipulation methods as append(), style(), attr() etc. can take in a constan
 **Example**  
 Putting data before attr() makes sure you can access data in the DOM manipulation methods.
 
-```
+```js
 const svg = d3.select('svg');
 const data = [{ width: 200, height: 100, fill: 'blue' }];
 
 svg
   .select('rect')
   .data(d)
-  .attr('width', function(d) { return data.width; })
-  .attr('height', function(d) { return d.height; })
-  .attr('fill', function(d) { return d.fill; });
+  .attr('width', function(d) {
+    return data.width;
+  })
+  .attr('height', function(d) {
+    return d.height;
+  })
+  .attr('fill', function(d) {
+    return d.fill;
+  });
 ```
 
 Other than the data (or `d`) parameter, there are two other parameters (`i` and `n`) available to us.
 
-```
+```js
 const svg = d3.select('svg');
 const data = [{ width: 200, height: 100, fill: 'blue' }];
 
@@ -269,11 +343,11 @@ svg
   .select('rect')
   .data(d, i, n)
   .attr('width', function(d, i, n) {
-    console.log(d);    // { width: 200, height: 100, fill: 'blue' }
-    console.log(i);    //  0
-    console.log(n);    // [rect]
+    console.log(d); // { width: 200, height: 100, fill: 'blue' }
+    console.log(i); //  0
+    console.log(n); // [rect]
     return d.width;
-  })
+  });
 ```
 
 - `d` represents data
@@ -285,7 +359,7 @@ svg
 For the most part, using a regular function and an arrow function in D3 will work in the same way. (as below)  
 However, there is one difference. The value of `this` keyword inside the function is going to be different in each case.
 
-```
+```js
 svg
   .select('rect')
   .data(data)
@@ -353,24 +427,26 @@ The following methods will sends http request to the specified url to load data 
 - d3.tsv()
 - d3.xml()
 
-```
-d3.json('./circles.json').then(data => {
-  const circles = svg.selectAll('circle').data(data);
+```js
+d3.json('./circles.json')
+  .then(data => {
+    const circles = svg.selectAll('circle').data(data);
 
-  // add attrs to circle already in the DOM
-  circles
-    .attr('cy', 200)
-    .attr('cx', d => d.distance)
-    .attr('r', d => d.radius)
-    .attr('fill', d => d.fill);
+    // add attrs to circle already in the DOM
+    circles
+      .attr('cy', 200)
+      .attr('cx', d => d.distance)
+      .attr('r', d => d.radius)
+      .attr('fill', d => d.fill);
 
-  // append the enter selection to the DOM
-  circles
-    .enter()
-    .append('circle')
-    .attr('cy', 200)
-    .attr('cx', d => d.distance)
-    .attr('r', d => d.radius)
-    .attr('fill', d => d.fill);
-}).catch(error => alert('cannot fetch data'));
+    // append the enter selection to the DOM
+    circles
+      .enter()
+      .append('circle')
+      .attr('cy', 200)
+      .attr('cx', d => d.distance)
+      .attr('r', d => d.radius)
+      .attr('fill', d => d.fill);
+  })
+  .catch(error => alert('cannot fetch data'));
 ```
