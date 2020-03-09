@@ -2,7 +2,7 @@
 const svg = d3.select('svg');
 
 // join the data to circle
-d3.json('./dummy_data/planets.json')
+d3.json('./circle.json')
   .then(data => {
     const circles = svg.selectAll('circle').data(data);
 
