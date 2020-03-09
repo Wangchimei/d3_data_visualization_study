@@ -12,6 +12,8 @@
     - [Solution for Using Arrow Functions](https://github.com/Wangchimei/d3_data_visualization_study#solution-for-using-arrow-functions)
   - [Data Binding](https://github.com/Wangchimei/d3_data_visualization_study#data-binding-%CE%B4)
   - [Data Loading](https://github.com/Wangchimei/d3_data_visualization_study#data-loading-%CE%B4)
+  - [Scale](https://github.com/Wangchimei/d3_data_visualization_study#scale-%CE%B4)
+  - [Axes](https://github.com/Wangchimei/d3_data_visualization_study#axes-%CE%B4)
 
 ## SVG Basic [&#916;](https://github.com/Wangchimei/d3_data_visualization_study#table-of-content)
 
@@ -451,11 +453,13 @@ d3.json('./circles.json')
   .catch(error => alert('cannot fetch data'));
 ```
 
-### Scales
+### Scales [&#916;](https://github.com/Wangchimei/d3_data_visualization_study#table-of-content)
 
 Added scaling factors is to ensure that our shapes are visible on the screen, because some data values may be too large while others too small.
 
 Using scale allows to map our data values to values that would be better represented in visualizations.
+
+[More D3 Scales](https://github.com/d3/d3-scale/blob/master/README.md#api-reference)
 
 #### Terminology: Domain and Range
 
@@ -473,13 +477,13 @@ Using scale allows to map our data values to values that would be better represe
 **Band scale** splits the data into bands of equal width depending on how many different elements in the original data and how much horizontal space is available
 
 <div align="center">
-  <img src="https://i.imgur.com/aa2Rp8x.png" height="300"/>
+  <img src="https://i.imgur.com/aa2Rp8x.png" height="400"/>
 </div>
 
 ```js
 const svg = d3.select('svg');
 
-d3.json('./menu.json').then(data => {
+d3.json('./sales.json').then(data => {
   // band scale
   const x = d3
     .scaleBand()
@@ -489,17 +493,18 @@ d3.json('./menu.json').then(data => {
     .paddingOuter(0.2);
 
   // linear scale
-  const extent = d3.extent(data, d => d.orders);
+  const max = d3.max(data, d => d.sales);
   const y = d3
     .scaleLinear()
-    .domain(extent)
-    .range([50, 500]);
+    .domain([0, max])
+    .range([0, 500]);
 
   const rects = svg.selectAll('rect').data(data);
+
   // add attrs to existing element in the DOM
   rects
     .attr('width', x.bandwidth())
-    .attr('height', d => y(d.orders))
+    .attr('height', d => y(d.sales))
     .attr('fill', 'blue')
     .attr('x', d => x(d.name));
 
@@ -508,7 +513,7 @@ d3.json('./menu.json').then(data => {
     .enter()
     .append('rect')
     .attr('width', x.bandwidth())
-    .attr('height', d => y(d.orders))
+    .attr('height', d => y(d.sales))
     .attr('fill', 'blue')
     .attr('x', d => x(d.name));
 });
@@ -517,3 +522,45 @@ d3.json('./menu.json').then(data => {
 - `d3.min(data, d => d.orders)` return the minimum
 - `d3.max(data, d => d.orders)` return the maximum
 - `d3.extent(data, d => d.orders)` return `[min, max]`
+
+### Axes [&#916;](https://github.com/Wangchimei/d3_data_visualization_study#table-of-content)
+
+Graphs have two axes: x-axis (horizontal axis) and y-axis (vertical axis).  
+An axis is made of lines, ticks and labels.  
+To **create an axis**, it relies on data and scale.
+
+- d3.axisTop()
+- d3.axisRight()
+- d3.axisBottom()
+- d3.axisLeft()
+
+##### Creating y-axis
+
+```js
+const svg = d3
+  .select('.canvas')
+  .append('svg')
+  .attr('width', 600)
+  .attr('height', 600);
+
+d3.json('./sales.json').then(data => {
+  // linear scale (create scale)
+  const max = d3.max(data, d => d.sales);
+  const yScale = d3
+    .scaleLinear()
+    .domain([0, max])
+    .range([200, 0]); // reverse y-axis (0 is at the bottom)
+
+  // Add scales to axis
+  const yAxis = d3
+    .axisLeft(yScale)
+    .ticks(4)
+    .tickFormat(d => d);
+
+  //Append group and insert axis (call yAxis function)
+  svg
+    .append('g')
+    .attr('transform', 'translate(50, 10)')
+    .call(yAxis);
+});
+```
