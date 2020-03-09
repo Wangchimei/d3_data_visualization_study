@@ -3,6 +3,7 @@
 ## Table of Content
 
 - [SVG Basic](https://github.com/Wangchimei/d3_data_visualization_study#svg-basic-%CE%B4)
+
 - [D3.js](https://github.com/Wangchimei/d3_data_visualization_study#d3js)
 
   - [DOM Selection](https://github.com/Wangchimei/d3_data_visualization_study#dom-selection-%CE%B4)
@@ -16,7 +17,7 @@
   - [Scale](https://github.com/Wangchimei/d3_data_visualization_study#scale-%CE%B4)
   - [Axes](https://github.com/Wangchimei/d3_data_visualization_study#axes-%CE%B4)
 
-- [D3 x Firebase (Real-time Database)](https://github.com/Wangchimei/d3_data_visualization_study#d3js)
+- [D3 x Firebase (Real-time Database)](https://github.com/Wangchimei/d3_data_visualization_study#d3-x-firestore-real-time-database)
   - [Retrieving Data](https://github.com/Wangchimei/d3_data_visualization_study#retrieving-data-%CE%B4)
   - [Update Pattern](https://github.com/Wangchimei/d3_data_visualization_study#update-pattern-%CE%B4)
 
@@ -603,7 +604,7 @@ db.collection('collection_name')
   });
 ```
 
-#### Getting Real-time Data [&#916;](https://github.com/Wangchimei/d3_data_visualization_study#table-of-content)
+#### Getting Real-time Data
 
 ```js
 const db = firebase.firestore();
@@ -637,7 +638,7 @@ db.collection('dishes').onSnapshot(snapshot => {
 });
 ```
 
-### Update Pattern
+### Update Pattern [&#916;](https://github.com/Wangchimei/d3_data_visualization_study#table-of-content)
 
 General premise:
 
