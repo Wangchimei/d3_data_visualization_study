@@ -4,6 +4,7 @@
 
 - [SVG Basic](https://github.com/Wangchimei/d3_data_visualization_study#svg-basic-%CE%B4)
 - [D3.js](https://github.com/Wangchimei/d3_data_visualization_study#d3js)
+
   - [DOM Selection](https://github.com/Wangchimei/d3_data_visualization_study#dom-selection-%CE%B4)
   - [DOM Manipulation](https://github.com/Wangchimei/d3_data_visualization_study#dom-manipulation-%CE%B4)
   - [Method Chaining](https://github.com/Wangchimei/d3_data_visualization_study#method-chaining-%CE%B4)
@@ -14,6 +15,10 @@
   - [Data Loading](https://github.com/Wangchimei/d3_data_visualization_study#data-loading-%CE%B4)
   - [Scale](https://github.com/Wangchimei/d3_data_visualization_study#scale-%CE%B4)
   - [Axes](https://github.com/Wangchimei/d3_data_visualization_study#axes-%CE%B4)
+
+- [D3 x Firebase (Real-time Database)](https://github.com/Wangchimei/d3_data_visualization_study#d3js)
+  - [Retrieving Data](https://github.com/Wangchimei/d3_data_visualization_study#retrieving-data-%CE%B4)
+  - [Update Pattern](https://github.com/Wangchimei/d3_data_visualization_study#update-pattern-%CE%B4)
 
 ## SVG Basic [&#916;](https://github.com/Wangchimei/d3_data_visualization_study#table-of-content)
 
@@ -395,7 +400,7 @@ In arrow functions, the value of `n[i]` will equal to `this` in regular function
 | exit()  | Removes nodes and adds them to the exit selection which can be later removed from the DOM |
 | datum() | Injects data to the selected element without computing a join.                            |
 
-#### `data()` & `enter()`
+#### `data()`
 
 `data()` function is used to join the specified array of data to the selected DOM elements and return the updated selection.
 
@@ -410,12 +415,22 @@ The `data()` function binds our data array to the selection.
 However, in a scenario that there are only 1 elements in the DOM, but 3 data elements in the array.  
 Only the first data element bound to the one available element. Rest of the data elements from the array were being processed to "enter selection".
 
+#### `enter()`
+
 The `enter()` method dynamically creates elements to the number of data values.  
 The output of `enter()` can be fed to `append()` method.  
 `append()` will then create DOM elements for which there are no corresponding DOM elements on the page.
 
 <div align="center">
-  <img src="https://i.imgur.com/IYdFDEA.png" height="300"/>
+  <img src="https://i.imgur.com/L6vNNC4.png" height="300"/>
+</div>
+
+#### `exit()`
+
+While enter() is used to add new reference nodes, exit is used to remove a node.
+
+<div align="center">
+  <img src="https://i.imgur.com/6ARpZgm.png" height="330"/>
 </div>
 
 ### Data Loading [&#916;](https://github.com/Wangchimei/d3_data_visualization_study#table-of-content)
@@ -472,12 +487,12 @@ Using scale allows to map our data values to values that would be better represe
 
 #### Linear Scale and Band Scale
 
-**Linear scale** takes in the values in the original data and split out a different value based on how much vertical space is available.
+- **Linear scale** takes in the values in the original data and split out a different value based on how much vertical space is available.
 
-**Band scale** splits the data into bands of equal width depending on how many different elements in the original data and how much horizontal space is available
+- **Band scale** splits the data into bands of equal width depending on how many different elements in the original data and how much horizontal space is available
 
 <div align="center">
-  <img src="https://i.imgur.com/aa2Rp8x.png" height="400"/>
+  <img src="https://i.imgur.com/aa2Rp8x.png" height="420"/>
 </div>
 
 ```js
@@ -563,4 +578,90 @@ d3.json('./sales.json').then(data => {
     .attr('transform', 'translate(50, 10)')
     .call(yAxis);
 });
+```
+
+## D3 x Firestore (Real-time Database)
+
+### Retrieving Data [&#916;](https://github.com/Wangchimei/d3_data_visualization_study#table-of-content)
+
+#### Getting Data
+
+```js
+const db = firebase.firestore();
+
+db.collection('collection_name')
+  .get()
+  .then(snapshot => {
+    // create data array
+    let data = [];
+    snapshot.forEach(doc => {
+      data.push(doc.data());
+    });
+
+    // then update data
+    update(data);
+  });
+```
+
+#### Getting Real-time Data [&#916;](https://github.com/Wangchimei/d3_data_visualization_study#table-of-content)
+
+```js
+const db = firebase.firestore();
+
+db.collection('dishes').onSnapshot(snapshot => {
+  // create empty array
+  let data = [];
+
+  snapshot.docChanges().forEach(change => {
+    // use rest parameter syntax (represent an indefinite number of arguments as an array)
+    const doc = { ...change.doc.data(), id: change.doc.id };
+
+    // identify change type ans do actions respectively
+    switch (change.type) {
+      case 'added':
+        data.push(doc);
+        break;
+      case 'modified':
+        const index = data.findIndex(item => item.id == doc.id);
+        data[index] = doc;
+        break;
+      case 'removed':
+        data = data.filter(item => item.id !== doc.id);
+        break;
+      default:
+        break;
+    }
+  });
+
+  update(data);
+});
+```
+
+### Update Pattern
+
+General premise:
+
+1. Update scales (domains) if they rely on the data
+2. Join (updated) data to elements
+3. Remove unwanted shapes (if there is any) using the exit selection
+4. Update current shapes existing in the DOM
+5. Append the enter selection to the DOM
+
+```js
+const update = data => {
+  // update scale if needed
+  y.domain([0, d3.max(data, d => d.sales)]);
+
+  // rejoin data
+  const rects = graph.selectAll('rect').data(data);
+
+  // remove unwanted shapes (if any)
+  rects.exit().remove()
+
+  // update current shape (if wanted)
+  rects.attr(...)
+
+  // append additional shapes to the DOM
+  rects.enter().append('rect').attr(...)
+};
 ```
