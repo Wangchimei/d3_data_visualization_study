@@ -430,7 +430,7 @@ The output of `enter()` can be fed to `append()` method.
 While enter() is used to add new reference nodes, exit is used to remove a node.
 
 <div align="center">
-  <img src="https://i.imgur.com/6ARpZgm.png" height="300"/>
+  <img src="https://i.imgur.com/6ARpZgm.png" height="330"/>
 </div>
 
 ### Data Loading [&#916;](https://github.com/Wangchimei/d3_data_visualization_study#table-of-content)
@@ -487,12 +487,12 @@ Using scale allows to map our data values to values that would be better represe
 
 #### Linear Scale and Band Scale
 
-**Linear scale** takes in the values in the original data and split out a different value based on how much vertical space is available.
+- **Linear scale** takes in the values in the original data and split out a different value based on how much vertical space is available.
 
-**Band scale** splits the data into bands of equal width depending on how many different elements in the original data and how much horizontal space is available
+- **Band scale** splits the data into bands of equal width depending on how many different elements in the original data and how much horizontal space is available
 
 <div align="center">
-  <img src="https://i.imgur.com/aa2Rp8x.png" height="400"/>
+  <img src="https://i.imgur.com/aa2Rp8x.png" height="420"/>
 </div>
 
 ```js
