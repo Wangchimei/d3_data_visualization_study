@@ -534,6 +534,8 @@ To **create an axis**, it relies on data and scale.
 - d3.axisBottom()
 - d3.axisLeft()
 
+##### Creating y-axis
+
 ```js
 const svg = d3
   .select('.canvas')
