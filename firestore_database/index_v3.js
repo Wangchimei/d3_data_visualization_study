@@ -52,6 +52,9 @@ xAxisGroup
 
 yAxisGroup.selectAll('text').attr('font-size', '1.3em');
 
+//! transition (pre-set)
+// const t = d3.transition().duration(500);
+
 //! Draw on the graph based on data (update every time)
 // update function
 const update = data => {
@@ -66,21 +69,32 @@ const update = data => {
   rects.exit().remove();
 
   // 4. Update current shapes in DOM
+  // (animation: don't need to redefine starting position because they are at the position)
   rects
-    .attr('width', x.bandwidth)
-    .attr('height', d => graphHeight - y(d.cp))
+    .attr('width', x.bandwidth())
     .attr('fill', 'LightSteelBlue')
-    .attr('x', d => x(d.name))
-    .attr('y', d => y(d.cp));
+    .attr('x', d => x(d.name));
+  // .transition()
+  // .duration(500)
+  // .attr('height', d => graphHeight - y(d.cp))
+  // .attr('y', d => y(d.cp));
 
   // 5. Append the enter selection to the DOM
   rects
     .enter()
     .append('rect')
-    .attr('width', x.bandwidth)
-    .attr('height', d => graphHeight - y(d.cp))
+    .attr('width', x.bandwidth())
+    .attr('height', 0)
     .attr('fill', 'LightSteelBlue')
     .attr('x', d => x(d.name))
+    .attr('y', graphHeight)
+    .merge(rects)
+    // .transition(t)
+    .transition()
+    .attrTween('width', widthTween)
+    // .duration(10000)
+    .ease(d3.easeLinear)
+    .attr('height', d => graphHeight - y(d.cp))
     .attr('y', d => y(d.cp));
 
   // call axes
@@ -90,24 +104,22 @@ const update = data => {
 
 //! Communicate with Firestore (run update once)
 //get data from firestore
-
 let data = [];
 db.collection('pokedex').onSnapshot(snapshot => {
   snapshot.docChanges().forEach(change => {
     // console.log(change.type);
     // console.log(change.doc.data());
     // console.log(change.doc.id);
-
     const doc = { ...change.doc.data(), id: change.doc.id };
-    console.log(change);
+    console.log('link');
 
     switch (change.type) {
       case 'added':
         data.push(doc);
         break;
       case 'modified':
-        const index = data.fineIndex(item => item.id == doc.id);
-        data[index] = data;
+        const index = data.findIndex(item => item.id == doc.id);
+        data[index] = doc;
         break;
       case 'removed':
         data = data.filter(item => item.id !== doc.id);
@@ -117,3 +129,19 @@ db.collection('pokedex').onSnapshot(snapshot => {
     update(data);
   });
 });
+
+//? Animation
+//? For graph to grow from the bottom, starting point of rect and height of rect bar need to be changed
+//? Starting point of rect (i.e. "y"): graphHeight to y(d.cp)
+//? Height of rect bar (i.e. "height"): 0 to y(d.cp)
+
+const widthTween = d => {
+  // define interpolator (d3.interpolator returns a function)
+  let i = d3.interpolate(0, x.bandwidth());
+
+  // return a function which takes in a time ticker "t" (continuously firing until the duration ends)
+  return function(t) {
+    // return the value from passing the ticker in to the interpolator (0~1)
+    return i(t);
+  };
+};

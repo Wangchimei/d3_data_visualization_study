@@ -16,6 +16,7 @@
   - [Data Loading](https://github.com/Wangchimei/d3_data_visualization_study#data-loading-%CE%B4)
   - [Scale](https://github.com/Wangchimei/d3_data_visualization_study#scale-%CE%B4)
   - [Axes](https://github.com/Wangchimei/d3_data_visualization_study#axes-%CE%B4)
+  - [Animation](https://github.com/Wangchimei/d3_data_visualization_study#animation-%CE%B4)
 
 - [D3 x Firebase (Real-time Database)](https://github.com/Wangchimei/d3_data_visualization_study#d3-x-firestore-real-time-database)
 
@@ -584,6 +585,84 @@ d3.json('./sales.json').then(data => {
 });
 ```
 
+### Animation [&#916;](https://github.com/Wangchimei/d3_data_visualization_study#table-of-content)
+
+Transitions are derived from selections via `selection.transition`. You can also create a transition on the document root element using `d3.transition`.
+
+You must append elements or bind data before a transition starts.  
+Transitions support most selection methods (such as `transition.attr` and `transition.style` in place of selection.attr and selection.style), but not all methods are supported.
+
+| Method                  | Description                                                                                                                          |
+| :---------------------- | :----------------------------------------------------------------------------------------------------------------------------------- |
+| selection.transition()  | Schedules a transition for the selected elements                                                                                     |
+| transition.merge(other) | Returns a new transition merging this transition with the specified other transition, which must have the same id as this transition |
+| transition.duration()   | Specifies the animation duration in milliseconds for each element                                                                    |
+| transition.ease()       | Specifies the easing function, example: linear, elastic, bounce                                                                      |
+| transition.delay()      | Specifies the delay in animation in milliseconds for each element                                                                    |
+
+```js
+const svg = d3
+  .select('.canvas')
+  .append('svg')
+  .attr('width', 500)
+  .attr('height', 500);
+
+const bar = svg
+  .append('rect')
+  .attr('fill', 'blue')
+  .attr('x', 100)
+  .attr('y', 0)
+  .attr('height', 0)
+  .attr('width', 10);
+
+const update = () => {
+  bar
+    .transition()
+    .ease(d3.easeLinear)
+    .duration(2000)
+    .delay(2000)
+    .attr('height', 100);
+};
+
+update();
+```
+
+#### Custom Interpolator & Tweens
+
+An interpolator is a function which takes your start state A, and your end state B, and returns a function.  
+This function can be passed a time ticker (between 0 and1), which represents the duration of the transition (i.e. different stages through the transition that is currently in).  
+To specify a custom interpolator, use `transition.attrTween`, `transition.styleTween` or `transition.tween`.
+
+```js
+rects
+  .enter()
+  .append('rect')
+  .attr('height', 0)
+  .attr('fill', 'LightSteelBlue')
+  .attr('x', d => x(d.name))
+  .attr('y', graphHeight)
+  .merge(rects)
+  .transition()
+  .attrTween('width', widthTween)
+  .duration(500)
+  .ease(d3.easeLinear)
+  .attr('height', d => graphHeight - y(d.cp))
+  .attr('y', d => y(d.cp));
+
+const widthTween = d => {
+  // define interpolator (d3.interpolator returns a function)
+  let i = d3.interpolate(0, x.bandwidth());
+
+  // return a function which takes in a time ticker "t" (continuously firing until the duration ends)
+  return function(t) {
+    // return the value from passing the ticker in to the interpolator (0~1)
+    return i(t);
+  };
+};
+```
+
+[More about d3-transition](https://github.com/d3/d3-transition#api-reference)
+
 ## D3 x Firestore (Real-time Database)
 
 ### Retrieving Data [&#916;](https://github.com/Wangchimei/d3_data_visualization_study#table-of-content)
@@ -683,7 +762,7 @@ It is much more manageable to break our code in to three main sections in order 
 
 ---
 
-Break down in steps: (static data)
+Break down in steps:
 
 1. Creating the SVG and dimensions
 
@@ -787,13 +866,80 @@ Break down in steps: (static data)
 4. Getting data and call update function
 
    ```js
-   db.collection('collection_name')
-     .get()
-     .then(snapshot => {
-       let data = [];
-       snapshot.forEach(doc => {
-         data.push(doc.data());
-       });
-       update(data);
+   let data = [];
+   db.collection('dishes').onSnapshot(snapshot => {
+     snapshot.docChanges().forEach(change => {
+       // use spread operator to spread the object out and create a new object
+       const doc = { ...change.doc.data(), id: change.doc.id };
+
+       // identify change type ans do actions respectively
+       switch (change.type) {
+         case 'added':
+           data.push(doc);
+           break;
+         case 'modified':
+           const index = data.findIndex(item => item.id == doc.id);
+           data[index] = doc;
+           break;
+         case 'removed':
+           data = data.filter(item => item.id !== doc.id);
+           break;
+         default:
+           break;
+       }
      });
+
+     update(data);
+   });
+   ```
+
+5. Adding animation
+
+   ```js
+   rects
+     .attr('width', x.bandwidth())
+     .attr('fill', 'LightSteelBlue')
+     .attr('x', d => x(d.name));
+
+   rects
+     .enter()
+     .append('rect')
+     .attr('width', x.bandwidth())
+     .attr('height', 0)
+     .attr('fill', 'LightSteelBlue')
+     .attr('x', d => x(d.name))
+     .attr('y', graphHeight)
+     .merge(rects)
+     .transition()
+     .duration(500)
+     .attr('height', d => graphHeight - y(d.cp))
+     .attr('y', d => y(d.cp));
+   ```
+
+   Or to declare at the top (set-up section)
+
+   ```js
+   const t = d3.transition().duration(500);
+
+   const update = data => {
+
+     ** omitted **
+     rects
+       .attr('width', x.bandwidth())
+       .attr('fill', 'LightSteelBlue')
+       .attr('x', d => x(d.name));
+
+     rects
+       .enter()
+       .append('rect')
+       .attr('width', x.bandwidth())
+       .attr('height', 0)
+       .attr('fill', 'LightSteelBlue')
+       .attr('x', d => x(d.name))
+       .attr('y', graphHeight)
+       .merge(rects)
+       .transition(t)
+       .attr('height', d => graphHeight - y(d.cp))
+       .attr('y', d => y(d.cp));
+   }
    ```
