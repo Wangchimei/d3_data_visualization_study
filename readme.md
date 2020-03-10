@@ -609,12 +609,10 @@ db.collection('collection_name')
 ```js
 const db = firebase.firestore();
 
+let data = [];
 db.collection('dishes').onSnapshot(snapshot => {
-  // create empty array
-  let data = [];
-
   snapshot.docChanges().forEach(change => {
-    // use rest parameter syntax (represent an indefinite number of arguments as an array)
+    // use spread operator to spread the object out and create a new object
     const doc = { ...change.doc.data(), id: change.doc.id };
 
     // identify change type ans do actions respectively
@@ -627,6 +625,7 @@ db.collection('dishes').onSnapshot(snapshot => {
         data[index] = doc;
         break;
       case 'removed':
+        // filter out "false", keep "true"
         data = data.filter(item => item.id !== doc.id);
         break;
       default:
