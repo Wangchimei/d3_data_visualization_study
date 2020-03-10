@@ -1,3 +1,4 @@
+//! Set-ups
 // margin and dimensions
 const chart = { width: 600, height: 600 };
 const margin = { top: 20, right: 20, bottom: 100, left: 100 };
@@ -32,7 +33,6 @@ const x = d3
   .range([0, graphWidth])
   .padding(0.2);
 
-//! Set-ups
 // linear scale (pass in min and max)
 const y = d3.scaleLinear().range([graphHeight, 0]);
 

@@ -18,8 +18,11 @@
   - [Axes](https://github.com/Wangchimei/d3_data_visualization_study#axes-%CE%B4)
 
 - [D3 x Firebase (Real-time Database)](https://github.com/Wangchimei/d3_data_visualization_study#d3-x-firestore-real-time-database)
+
   - [Retrieving Data](https://github.com/Wangchimei/d3_data_visualization_study#retrieving-data-%CE%B4)
   - [Update Pattern](https://github.com/Wangchimei/d3_data_visualization_study#update-pattern-%CE%B4)
+
+- [Bar Chart](https://github.com/Wangchimei/d3_data_visualization_study#bar-chart-%CE%B4)
 
 ## SVG Basic [&#916;](https://github.com/Wangchimei/d3_data_visualization_study#table-of-content)
 
@@ -665,3 +668,132 @@ const update = data => {
   rects.enter().append('rect').attr(...)
 };
 ```
+
+## Bar Chart [&#916;](https://github.com/Wangchimei/d3_data_visualization_study#table-of-content)
+
+It is much more manageable to break our code in to three main sections in order to dynamically working with database.
+
+---
+
+**Section 1:** Set-ups which does not depend on data (svg, scales, axis, style...etc.)
+
+**Section 2:** Define a update function which includes anything that relies on the data(used in section 3) and update visualization
+
+**Section 3:** Retrieving data or set up a real-time listener
+
+---
+
+Break down in steps: (static data)
+
+1. Creating the SVG and dimensions
+
+   ```js
+   // margin and dimensions
+   const chart = { width: 600, height: 600 };
+   const margin = { top: 20, right: 20, bottom: 100, left: 100 };
+   const graphHeight = chart.height - margin.top - margin.bottom;
+   const graphWidth = chart.width - margin.right - margin.left;
+
+   // select canvas div
+   const svg = d3
+     .select('.canvas')
+     .append('svg')
+     .attr('width', chart.width)
+     .attr('height', chart.height);
+
+   // create group for chart and move the graph down from top left
+   const graph = svg
+     .append('g')
+     .attr('width', graphWidth)
+     .attr('height', graphHeight)
+     .attr('transform', `translate(${margin.left}, ${margin.top})`);
+
+   // create group axex in graph and move x-axis to the bottom
+   const xAxisGroup = graph
+     .append('g')
+     .attr('transform', `translate(0, ${graphHeight})`);
+
+   const yAxisGroup = graph.append('g');
+   ```
+
+2. Defining the scales (static scale attr)  
+   _Leave the parts that interact with data in update function later)_
+
+   ```js
+   // band scale
+   const x = d3
+     .scaleBand()
+     .range([0, graphWidth])
+     .padding(0.2);
+
+   // linear scale (reverse min and max)
+   const y = d3.scaleLinear().range([graphHeight, 0]);
+
+   // init x-axis and y-axis (pass in scale)
+   const xAxis = d3.axisBottom(x);
+   const yAxis = d3
+     .axisLeft(y)
+     .ticks(3)
+     .tickFormat(d => `${d} cp`);
+
+   // update text
+   xAxisGroup
+     .selectAll('text')
+     .attr('font-size', '1.3em')
+     .attr('transform', 'rotate(-40)')
+     .attr('text-anchor', 'end');
+
+   yAxisGroup.selectAll('text').attr('font-size', '1.3em');
+   ```
+
+3. Defining update function
+
+   ```js
+   const update = data => {
+     // 1. update scales domains that rely on tbe data
+     x.domain(data.map(pokemon => pokemon.name));
+     y.domain([0, d3.max(data, d => d.cp)]);
+
+     // 2. Join (updated) data to elements
+     const rects = graph.selectAll('rect').data(data);
+
+     // 3. Remove exit selection
+     rects.exit().remove();
+
+     // 4. Update current shapes in DOM
+     rects
+       .attr('width', x.bandwidth)
+       .attr('height', d => graphHeight - y(d.cp))
+       .attr('fill', 'LightSteelBlue')
+       .attr('x', d => x(d.name))
+       .attr('y', d => y(d.cp));
+
+     // 5. Append the enter selection to the DOM
+     rects
+       .enter()
+       .append('rect')
+       .attr('width', x.bandwidth)
+       .attr('height', d => graphHeight - y(d.cp))
+       .attr('fill', 'LightSteelBlue')
+       .attr('x', d => x(d.name))
+       .attr('y', d => y(d.cp));
+
+     // call axes
+     xAxisGroup.call(xAxis);
+     yAxisGroup.call(yAxis);
+   };
+   ```
+
+4. Getting data and call update function
+
+   ```js
+   db.collection('collection_name')
+     .get()
+     .then(snapshot => {
+       let data = [];
+       snapshot.forEach(doc => {
+         data.push(doc.data());
+       });
+       update(data);
+     });
+   ```
