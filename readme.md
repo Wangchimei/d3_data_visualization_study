@@ -24,6 +24,7 @@
   - [Update Pattern](https://github.com/Wangchimei/d3_data_visualization_study#update-pattern-%CE%B4)
 
 - [Bar Chart](https://github.com/Wangchimei/d3_data_visualization_study#bar-chart-%CE%B4)
+- [Pie Chart](https://github.com/Wangchimei/d3_data_visualization_study#pie-chart-%CE%B4)
 
 ## SVG Basic [&#916;](https://github.com/Wangchimei/d3_data_visualization_study#table-of-content)
 
@@ -943,3 +944,13 @@ Break down in steps:
        .attr('y', d => y(d.cp));
    }
    ```
+
+## Pie Chart [&#916;](https://github.com/Wangchimei/d3_data_visualization_study#table-of-content)
+
+| Method            | Description                                                   |
+| :---------------- | :------------------------------------------------------------ |
+| d3.pie()          | Creates an pie generator (analyze data and calculate radians) |
+| d3.arc()          | Creates an ordinal scale                                      |
+| d3.scaleOrdinal() | Creates an ordinal scale                                      |
+
+**Note:** 2 radians equals 360 degrees
