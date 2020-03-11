@@ -785,7 +785,19 @@ It is much more manageable to break our code in to three main sections in order 
 
 ---
 
-Break down in steps:
+### Methods Overview
+
+| Method                               | Description                                                                                 |
+| :----------------------------------- | :------------------------------------------------------------------------------------------ |
+| d3.scaleBand()                       | Band scales are like ordinal scales except the output range is continuous and numeric.      |
+| d3.scaleLinear()                     | Construct continuous linear scale where input data (domain) maps to specified output range. |
+| d3.axisBottom(xScale)                | Creates an ordinal scale                                                                    |
+| d3.axisLeft(yScale)                  | Creates an ordinal scale                                                                    |
+| axisGroup.call(d3.axisBottom(xScale) | Inserts x-axis/y-axis into this group element                                               |
+| axis.ticks(n)                        | Specifies the number of ticks on y-axis                                                     |
+| axis.tickFormat()                    | formats the ticks                                                                           |
+
+### Break Down in Steps:
 
 1. Creating the SVG and dimensions
 
@@ -969,6 +981,8 @@ Break down in steps:
 
 ## Pie Chart [&#916;](https://github.com/Wangchimei/d3_data_visualization_study#table-of-content)
 
+### Methods Overview
+
 | Method            | Description                                  |
 | :---------------- | :------------------------------------------- |
 | d3.pie()          | Creates an pie generator (calculate radians) |
@@ -982,8 +996,187 @@ Break down in steps:
 `d3.pie()` takes in the data, calculates the start angle and end angle for each wedge of the pie chart, and generate a new array object, which contains original data (**example: access through `d.data.name`**).  
 These start and end angles can then be used later in `d3.arc()` to create actual paths for the wedges.
 
+```js
+const pie = d3
+  .pie()
+  .sort(null)
+  .value(d => d.cost);
+```
+
+Let's pass in a set of dummy data, and see what `pie(data)` returns
+
+<div align="center">
+  <img src="https://i.imgur.com/7ydyQmF.png" height="150"/>
+</div>
+
+It creates a startAngle, endAngle, and store the original data.
+
 ### d3.arc()
 
 `d3.arc()` generates paths that will create the pie's wedges.  
 Arcs need an **inner radius** and **outer radius**.  
 If the inner radius is 0, the result will be a _pie chart_, otherwise the result will be a _donut chart_.
+
+```js
+const arcPath = d3
+  .arc()
+  .outerRadius(dims.radius)
+  .innerRadius(dims.radius / 2);
+```
+
+If we pass in what `pie(data)` created into `arc()` function, we will get a path, which is used to draw the pie chart.
+
+### Break Down in Steps:
+
+1. Creating the SVG and dimensions
+
+   ```js
+   const dims = { height: 300, width: 300, radius: 150 };
+   const center = { x: dims.width / 2 + 5, y: dims.height / 2 + 5 };
+
+   const svg = d3
+     .select('.canvas')
+     .append('svg')
+     .attr('width', dims.width + 150)
+     .attr('height', dims.height + 150);
+
+   const graph = svg
+     .append('g')
+     .attr('transform', `translate(${center.x}, ${center.y})`);
+   ```
+
+2. Initializing `pie()`, `arc()`, and ordinal scales
+
+   ```js
+   const pie = d3
+     .pie()
+     .sort(null)
+     .value(d => d.cost);
+
+   const arcPath = d3
+     .arc()
+     .outerRadius(dims.radius)
+     .innerRadius(dims.radius / 2);
+
+   const color = d3.scaleOrdinal(d3['schemePastel1']);
+   ```
+
+3. Defining update function
+
+   ```js
+   const update = data => {
+     // update scale domain
+     color.domain(data.map(d => d.name));
+
+     // join enhanced (pie) data to path elements
+     const paths = graph.selectAll('path').data(pie(data));
+
+     // handle the exit selection
+     paths.exit().remove();
+
+     // handle the current DOM path updates
+     paths.attr('d', arcPath);
+
+     // handle the enter selection
+     paths
+       .enter()
+       .append('path')
+       .attr('class', 'arc')
+       .attr('d', arcPath)
+       .attr('stroke', '#fff')
+       .attr('stroke-width', 3)
+       .attr('fill', d => color(d.data.name));
+   };
+   ```
+
+4. Getting data (same as in bar chart section)
+
+5. Adding animation
+
+   - for enter selection: transit from end angle to start angle
+
+     ```js
+     const arcTweenEnter = d => {
+        let i = d3.interpolate(d.endAngle, d.startAngle);
+
+        return function(t) {
+          d.startAngle = i(t);
+          return arcPath(d);
+        };
+      ;
+     ```
+
+     ```js
+     paths
+       .enter()
+       .append('path')
+       .attr('class', 'arc')
+       .attr('stroke', '#fff')
+       .attr('stroke-width', 3)
+       .attr('fill', d => color(d.data.name))
+       .transition()
+       .duration(750)
+       .attrTween('d', arcTweenEnter);
+     ```
+
+   - for exit selection: transit from start angle to end angle
+
+     ```js
+     const arcTweenEnter = d => {
+       let i = d3.interpolate(d.endAngle, d.startAngle);
+
+       return function(t) {
+         d.startAngle = i(t);
+         return arcPath(d);
+       };
+     };
+     ```
+
+     ```js
+     paths
+       .exit()
+       .transition()
+       .duration(750)
+       .attrTween('d', arcTweenExit)
+       .remove();
+     ```
+
+   - for exiting element: transit from previous angle to current angle
+
+     **Store original position when enter**
+
+     ```js
+     paths
+       .enter()
+       **omitted**
+       .each(function(d) {
+         this._current = d;
+       })
+       .transition()
+       .duration(750)
+       .attrTween('d', arcTweenEnter);
+     ```
+
+     **Create custom tween and apply**
+
+     ```js
+     function arcTweenUpdate(d) {
+       let i = d3.interpolate(this._current, d);
+
+       // update the current position with the updated data
+       this._current = i[1];
+
+       return function(t) {
+         return arcPath(i(t));
+       };
+     }
+     ```
+
+     ```js
+     paths
+       .transition()
+       .duration(750)
+       .attrTween('d', arcTweenUpdate);
+     ```
+
+6. Adding legend

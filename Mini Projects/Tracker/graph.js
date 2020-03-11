@@ -21,9 +21,9 @@ const pie = d3
 
 //? What's in the data
 // const angles = pie([
-//   { name: 'rent', cost: 500 },
+//   { name: 'coffee', cost: 500 },
 //   { name: 'bills', cost: 300 },
-//   { name: 'gaming', cost: 200 }
+//   { name: 'gaming', cost: 200 },
 // ]);
 
 // console.log(angles);
@@ -47,19 +47,38 @@ const update = data => {
 
   // join enhanced (pie) data to path elements
   // feed data to pie to generate radians
-
   const paths = graph.selectAll('path').data(pie(data));
-
   // console.log(paths);
+
+  // handle the exit selection
+  paths
+    .exit()
+    .transition()
+    .duration(750)
+    .attrTween('d', arcTweenExit)
+    .remove();
+
+  // handle the current DOM path updates
+  paths
+    // .attr('d', arcPath)
+    .transition()
+    .duration(750)
+    .attrTween('d', arcTweenUpdate);
 
   paths
     .enter()
     .append('path')
     .attr('class', 'arc')
-    .attr('d', arcPath)
+    // .attr('d', arcPath)
     .attr('stroke', '#fff')
     .attr('stroke-width', 3)
-    .attr('fill', d => color(d.data.name));
+    .attr('fill', d => color(d.data.name))
+    .each(function(d) {
+      this._current = d;
+    })
+    .transition()
+    .duration(750)
+    .attrTween('d', arcTweenEnter);
 };
 
 //! connect to db
@@ -74,7 +93,7 @@ db.collection('expenses').onSnapshot(snapshot => {
         data.push(doc);
         break;
       case 'modified':
-        data.findIndex(item => item.id === doc.id);
+        const index = data.findIndex(item => item.id === doc.id);
         data[index] = doc;
         break;
       case 'removed':
@@ -86,3 +105,41 @@ db.collection('expenses').onSnapshot(snapshot => {
   });
   update(data);
 });
+
+// transition from the end to start
+//end angle is always in the same position, the start angle changes to the end position
+const arcTweenEnter = d => {
+  let i = d3.interpolate(d.endAngle, d.startAngle);
+
+  return function(t) {
+    d.startAngle = i(t);
+    return arcPath(d);
+  };
+};
+
+const arcTweenExit = d => {
+  let i = d3.interpolate(d.startAngle, d.endAngle);
+
+  return function(t) {
+    d.startAngle = i(t);
+    return arcPath(d);
+  };
+};
+
+// use function keyword in order to access 'this' keyword
+// d represents the updated data, _current is the previous position
+function arcTweenUpdate(d) {
+  //? first, use .each in enter selection to store original position
+  //? console.log(this._current, d);
+
+  //interpolate between the two objects (not end angel)
+  let i = d3.interpolate(this._current, d);
+
+  // update the current position with the updated data
+  this._current = i[1];
+
+  return function(t) {
+    // i(t) returns a value of d (data object) which we pass to arcPath
+    return arcPath(i(t));
+  };
+}
