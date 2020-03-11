@@ -544,6 +544,28 @@ d3.json('./sales.json').then(data => {
 - `d3.max(data, d => d.orders)` return the maximum
 - `d3.extent(data, d => d.orders)` return `[min, max]`
 
+#### Ordinal Scales
+
+`d3.scaleOrdinal(range)` creates an ordinal scale.  
+By giving it some values (range), it can consistently output the same value for the same thing (domain).  
+`ordinal.domain` sets or reads the scale’s domain. (only takes in **array of strings**, not objects.)
+
+<div align="center">
+  <img src="https://i.imgur.com/4U9HLlT.png" height="250"/>
+</div>
+
+```js
+const color = d3.scaleOrdinal(d3['schemePastel1']);
+```
+
+[More Color Schemes](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#api-reference)
+
+or assign colors on your own
+
+```js
+d3.scaleOrdinal(['earth', 'wind', 'fire'], ['green', 'red', 'blue']);
+```
+
 ### Axes [&#916;](https://github.com/Wangchimei/d3_data_visualization_study#table-of-content)
 
 Graphs have two axes: x-axis (horizontal axis) and y-axis (vertical axis).  
@@ -947,10 +969,21 @@ Break down in steps:
 
 ## Pie Chart [&#916;](https://github.com/Wangchimei/d3_data_visualization_study#table-of-content)
 
-| Method            | Description                                                   |
-| :---------------- | :------------------------------------------------------------ |
-| d3.pie()          | Creates an pie generator (analyze data and calculate radians) |
-| d3.arc()          | Creates an ordinal scale                                      |
-| d3.scaleOrdinal() | Creates an ordinal scale                                      |
+| Method            | Description                                  |
+| :---------------- | :------------------------------------------- |
+| d3.pie()          | Creates an pie generator (calculate radians) |
+| d3.arc()          | Creates an arc generator (create path)       |
+| d3.scaleOrdinal() | Creates an ordinal scale                     |
 
 **Note:** 2 radians equals 360 degrees
+
+### d3.pie()
+
+`d3.pie()` takes in the data, calculates the start angle and end angle for each wedge of the pie chart, and generate a new array object, which contains original data (**example: access through `d.data.name`**).  
+These start and end angles can then be used later in `d3.arc()` to create actual paths for the wedges.
+
+### d3.arc()
+
+`d3.arc()` generates paths that will create the pie's wedges.  
+Arcs need an **inner radius** and **outer radius**.  
+If the inner radius is 0, the result will be a _pie chart_, otherwise the result will be a _donut chart_.
