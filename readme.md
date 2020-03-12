@@ -17,6 +17,7 @@
   - [Scale](https://github.com/Wangchimei/d3_data_visualization_study#scale-%CE%B4)
   - [Axes](https://github.com/Wangchimei/d3_data_visualization_study#axes-%CE%B4)
   - [Animation](https://github.com/Wangchimei/d3_data_visualization_study#animation-%CE%B4)
+  - [Event](https://github.com/Wangchimei/d3_data_visualization_study#event-%CE%B4)
 
 - [D3 x Firebase (Real-time Database)](https://github.com/Wangchimei/d3_data_visualization_study#d3-x-firestore-real-time-database)
 
@@ -24,6 +25,11 @@
   - [Update Pattern](https://github.com/Wangchimei/d3_data_visualization_study#update-pattern-%CE%B4)
 
 - [Bar Chart](https://github.com/Wangchimei/d3_data_visualization_study#bar-chart-%CE%B4)
+  - [Methods Overview](https://github.com/Wangchimei/d3_data_visualization_study#methods-overview-%CE%B4)
+  - [Break Down in Steps](https://github.com/Wangchimei/d3_data_visualization_study#break-down-in-steps-%CE%B4)
+- [Pie Chart](https://github.com/Wangchimei/d3_data_visualization_study#pie-chart-%CE%B4)
+  - [Methods Overview](https://github.com/Wangchimei/d3_data_visualization_study#methods-overview-1-%CE%B4)
+  - [Break Down in Steps](https://github.com/Wangchimei/d3_data_visualization_study#break-down-in-steps-1-%CE%B4)
 
 ## SVG Basic [&#916;](https://github.com/Wangchimei/d3_data_visualization_study#table-of-content)
 
@@ -543,6 +549,28 @@ d3.json('./sales.json').then(data => {
 - `d3.max(data, d => d.orders)` return the maximum
 - `d3.extent(data, d => d.orders)` return `[min, max]`
 
+#### Ordinal Scales
+
+`d3.scaleOrdinal(range)` creates an ordinal scale.  
+By giving it some values (range), it can consistently output the same value for the same thing (domain).  
+`ordinal.domain` sets or reads the scale’s domain. (only takes in **array of strings**, not objects.)
+
+<div align="center">
+  <img src="https://i.imgur.com/4U9HLlT.png" height="250"/>
+</div>
+
+```js
+const color = d3.scaleOrdinal(d3['schemePastel1']);
+```
+
+[More Color Schemes](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#api-reference)
+
+or assign colors on your own
+
+```js
+d3.scaleOrdinal(['earth', 'wind', 'fire'], ['green', 'red', 'blue']);
+```
+
 ### Axes [&#916;](https://github.com/Wangchimei/d3_data_visualization_study#table-of-content)
 
 Graphs have two axes: x-axis (horizontal axis) and y-axis (vertical axis).  
@@ -663,6 +691,45 @@ const widthTween = d => {
 
 [More about d3-transition](https://github.com/d3/d3-transition#api-reference)
 
+### Event [&#916;](https://github.com/Wangchimei/d3_data_visualization_study#table-of-content)
+
+D3 supports built-in events and custom events. We can bind an event listener to any DOM element using `d3.selection.on()` method.
+
+| Method               | Description                                                                                                                          |
+| :------------------- | :----------------------------------------------------------------------------------------------------------------------------------- |
+| selection.on()       | Adds or removes event listeners to capture event types like click, mouseover, mouseout etc.                                          |
+| selection.dispatch() | Returns a new transition merging this transition with the specified other transition, which must have the same id as this transition |
+| d3.event             | Event object to access standard event fields such as timestamp or methods like preventDefault                                        |
+| d3.mouse(container)  | Gets the x and y coordinates of the current mouse position in the specified DOM element.                                             |
+| d3.touch()           | Gets the touch coordinates to a container                                                                                            |
+
+```js
+graph
+  .selectAll('path')
+  .on('mouseover', handleMouseOver)
+  .on('mouseleave', handleMouseLeave);
+```
+
+```js
+const handleMouseOver = (d, i, n) => {
+  d3.select(n[i])
+    .transition('ChangeFill')
+    .duration(300)
+    .attr('fill', '#6699CC');
+};
+
+const handleMouseLeave = (d, i, n) => {
+  d3.select(n[i])
+    .transition('ChangeFill')
+    .duration(300)
+    .attr('fill', d => color(d.data.name));
+};
+```
+
+**Note 1:** attach events after having enter section showing in the DOM  
+**Note 2:** Name your transitions so that it does not interfere with others  
+**Note 3:** `n[i]` in arrow functions is equal to `this` in regular functions
+
 ## D3 x Firestore (Real-time Database)
 
 ### Retrieving Data [&#916;](https://github.com/Wangchimei/d3_data_visualization_study#table-of-content)
@@ -762,7 +829,19 @@ It is much more manageable to break our code in to three main sections in order 
 
 ---
 
-Break down in steps:
+### Methods Overview [&#916;](https://github.com/Wangchimei/d3_data_visualization_study#table-of-content)
+
+| Method                               | Description                                                                                 |
+| :----------------------------------- | :------------------------------------------------------------------------------------------ |
+| d3.scaleBand()                       | Band scales are like ordinal scales except the output range is continuous and numeric.      |
+| d3.scaleLinear()                     | Construct continuous linear scale where input data (domain) maps to specified output range. |
+| d3.axisBottom(xScale)                | Creates an ordinal scale                                                                    |
+| d3.axisLeft(yScale)                  | Creates an ordinal scale                                                                    |
+| axisGroup.call(d3.axisBottom(xScale) | Inserts x-axis/y-axis into this group element                                               |
+| axis.ticks(n)                        | Specifies the number of ticks on y-axis                                                     |
+| axis.tickFormat()                    | formats the ticks                                                                           |
+
+### Break Down in Steps [&#916;](https://github.com/Wangchimei/d3_data_visualization_study#table-of-content)
 
 1. Creating the SVG and dimensions
 
@@ -943,3 +1022,232 @@ Break down in steps:
        .attr('y', d => y(d.cp));
    }
    ```
+
+## Pie Chart [&#916;](https://github.com/Wangchimei/d3_data_visualization_study#table-of-content)
+
+### Methods Overview [&#916;](https://github.com/Wangchimei/d3_data_visualization_study#table-of-content)
+
+| Method            | Description                                  |
+| :---------------- | :------------------------------------------- |
+| d3.pie()          | Creates an pie generator (calculate radians) |
+| d3.arc()          | Creates an arc generator (create path)       |
+| d3.scaleOrdinal() | Creates an ordinal scale                     |
+
+**Note:** 2 radians equals 360 degrees
+
+### d3.pie()
+
+`d3.pie()` takes in the data, calculates the start angle and end angle for each wedge of the pie chart, and generate a new array object, which contains original data (**example: access through `d.data.name`**).  
+These start and end angles can then be used later in `d3.arc()` to create actual paths for the wedges.
+
+```js
+const pie = d3
+  .pie()
+  .sort(null)
+  .value(d => d.cost);
+```
+
+Let's pass in a set of dummy data, and see what `pie(data)` returns
+
+<div align="center">
+  <img src="https://i.imgur.com/7ydyQmF.png" height="200"/>
+</div>
+
+It creates a startAngle, endAngle, and store the original data.
+
+### d3.arc()
+
+`d3.arc()` generates paths that will create the pie's wedges.  
+Arcs need an **inner radius** and **outer radius**.  
+If the inner radius is 0, the result will be a _pie chart_, otherwise the result will be a _donut chart_.
+
+```js
+const arcPath = d3
+  .arc()
+  .outerRadius(dims.radius)
+  .innerRadius(dims.radius / 2);
+```
+
+If we pass in what `pie(data)` created into `arc()` function, we will get a path, which is used to draw the pie chart.
+
+### Break Down in Steps [&#916;](https://github.com/Wangchimei/d3_data_visualization_study#table-of-content)
+
+1. Creating the SVG and dimensions
+
+   ```js
+   const dims = { height: 300, width: 300, radius: 150 };
+   const center = { x: dims.width / 2 + 5, y: dims.height / 2 + 5 };
+
+   const svg = d3
+     .select('.canvas')
+     .append('svg')
+     .attr('width', dims.width + 150)
+     .attr('height', dims.height + 150);
+
+   const graph = svg
+     .append('g')
+     .attr('transform', `translate(${center.x}, ${center.y})`);
+   ```
+
+2. Initializing `pie()`, `arc()`, and ordinal scales
+
+   ```js
+   const pie = d3
+     .pie()
+     .sort(null)
+     .value(d => d.cost);
+
+   const arcPath = d3
+     .arc()
+     .outerRadius(dims.radius)
+     .innerRadius(dims.radius / 2);
+
+   const color = d3.scaleOrdinal(d3['schemePastel1']);
+   ```
+
+3. Defining update function
+
+   ```js
+   const update = data => {
+     // update scale domain
+     color.domain(data.map(d => d.name));
+
+     // join enhanced (pie) data to path elements
+     const paths = graph.selectAll('path').data(pie(data));
+
+     // handle the exit selection
+     paths.exit().remove();
+
+     // handle the current DOM path updates
+     paths.attr('d', arcPath);
+
+     // handle the enter selection
+     paths
+       .enter()
+       .append('path')
+       .attr('class', 'arc')
+       .attr('d', arcPath)
+       .attr('stroke', '#fff')
+       .attr('stroke-width', 3)
+       .attr('fill', d => color(d.data.name));
+   };
+   ```
+
+4. Getting data (same as in bar chart section)
+
+5. Adding animation
+
+   - for enter selection: transit from end angle to start angle
+
+     ```js
+     const arcTweenEnter = d => {
+        let i = d3.interpolate(d.endAngle, d.startAngle);
+
+        return function(t) {
+          d.startAngle = i(t);
+          return arcPath(d);
+        };
+      ;
+     ```
+
+     ```js
+     paths
+       .enter()
+       .append('path')
+       .attr('class', 'arc')
+       .attr('stroke', '#fff')
+       .attr('stroke-width', 3)
+       .attr('fill', d => color(d.data.name))
+       .transition()
+       .duration(750)
+       .attrTween('d', arcTweenEnter);
+     ```
+
+   - for exit selection: transit from start angle to end angle
+
+     ```js
+     const arcTweenEnter = d => {
+       let i = d3.interpolate(d.endAngle, d.startAngle);
+
+       return function(t) {
+         d.startAngle = i(t);
+         return arcPath(d);
+       };
+     };
+     ```
+
+     ```js
+     paths
+       .exit()
+       .transition()
+       .duration(750)
+       .attrTween('d', arcTweenExit)
+       .remove();
+     ```
+
+   - for exiting element: transit from previous angle to current angle
+
+     **Store original position when enter**
+
+     ```js
+     paths
+       .enter()
+       **omitted**
+       .each(function(d) {
+         this._current = d;
+       })
+       .transition()
+       .duration(750)
+       .attrTween('d', arcTweenEnter);
+     ```
+
+     **Create custom tween and apply**
+
+     ```js
+     function arcTweenUpdate(d) {
+       let i = d3.interpolate(this._current, d);
+
+       // update the current position with the updated data
+       this._current = i[1];
+
+       return function(t) {
+         return arcPath(i(t));
+       };
+     }
+     ```
+
+     ```js
+     paths
+       .transition()
+       .duration(750)
+       .attrTween('d', arcTweenUpdate);
+     ```
+
+6. Adding legend using [d3 SVG Legend](https://d3-legend.susielu.com/)
+
+   ```js
+   const legendGroup = svg
+     .append('g')
+     .attr('transform', `translate(${dims.width + 40}, 10)`);
+
+   const legend = d3
+     .legendColor()
+     // .shape('circle')
+     .shape('path', d3.symbol().type(d3.symbolCircle)())
+     .shapePadding(10)
+     .scale(color);
+
+    const update = data => {
+      // update scale domain
+      color.domain(data.map(d => d.name));
+
+      // update and call legend
+      legendGroup.call(legend);
+      legendGroup.selectAll('text').attr('fill', '#fff');
+
+      **omitted**
+
+    }
+   ```
+
+7. (Additional) Event listeners, [tooltip](https://github.com/caged/d3-tip)...etc.
