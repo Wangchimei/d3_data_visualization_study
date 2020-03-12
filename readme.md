@@ -25,7 +25,11 @@
   - [Update Pattern](https://github.com/Wangchimei/d3_data_visualization_study#update-pattern-%CE%B4)
 
 - [Bar Chart](https://github.com/Wangchimei/d3_data_visualization_study#bar-chart-%CE%B4)
+  - [Methods Overview](https://github.com/Wangchimei/d3_data_visualization_study#methods-overview-%CE%B4)
+  - [Break Down in Steps](https://github.com/Wangchimei/d3_data_visualization_study#break-down-in-steps-%CE%B4)
 - [Pie Chart](https://github.com/Wangchimei/d3_data_visualization_study#pie-chart-%CE%B4)
+  - [Methods Overview](https://github.com/Wangchimei/d3_data_visualization_study#methods-overview-1-%CE%B4)
+  - [Break Down in Steps](https://github.com/Wangchimei/d3_data_visualization_study#break-down-in-steps-1-%CE%B4)
 
 ## SVG Basic [&#916;](https://github.com/Wangchimei/d3_data_visualization_study#table-of-content)
 
@@ -825,7 +829,7 @@ It is much more manageable to break our code in to three main sections in order 
 
 ---
 
-### Methods Overview
+### Methods Overview [&#916;](https://github.com/Wangchimei/d3_data_visualization_study#table-of-content)
 
 | Method                               | Description                                                                                 |
 | :----------------------------------- | :------------------------------------------------------------------------------------------ |
@@ -837,7 +841,7 @@ It is much more manageable to break our code in to three main sections in order 
 | axis.ticks(n)                        | Specifies the number of ticks on y-axis                                                     |
 | axis.tickFormat()                    | formats the ticks                                                                           |
 
-### Break Down in Steps:
+### Break Down in Steps [&#916;](https://github.com/Wangchimei/d3_data_visualization_study#table-of-content)
 
 1. Creating the SVG and dimensions
 
@@ -1021,7 +1025,7 @@ It is much more manageable to break our code in to three main sections in order 
 
 ## Pie Chart [&#916;](https://github.com/Wangchimei/d3_data_visualization_study#table-of-content)
 
-### Methods Overview
+### Methods Overview [&#916;](https://github.com/Wangchimei/d3_data_visualization_study#table-of-content)
 
 | Method            | Description                                  |
 | :---------------- | :------------------------------------------- |
@@ -1066,7 +1070,7 @@ const arcPath = d3
 
 If we pass in what `pie(data)` created into `arc()` function, we will get a path, which is used to draw the pie chart.
 
-### Break Down in Steps:
+### Break Down in Steps [&#916;](https://github.com/Wangchimei/d3_data_visualization_study#table-of-content)
 
 1. Creating the SVG and dimensions
 
@@ -1246,5 +1250,4 @@ If we pass in what `pie(data)` created into `arc()` function, we will get a path
     }
    ```
 
-7. (Additional) Event listeners, tooltip...wtc.
-   [tooltip](https://github.com/caged/d3-tip)
+7. (Additional) Event listeners, [tooltip](https://github.com/caged/d3-tip)...etc.
