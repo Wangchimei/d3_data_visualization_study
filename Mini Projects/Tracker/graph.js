@@ -40,10 +40,26 @@ const arcPath = d3
 // set ordinal scale
 const color = d3.scaleOrdinal(d3['schemePastel1']);
 
+// create a group for legend
+const legendGroup = svg
+  .append('g')
+  .attr('transform', `translate(${dims.width + 40}, 10)`);
+
+const legend = d3
+  .legendColor()
+  // .shape('circle')
+  .shape('path', d3.symbol().type(d3.symbolCircle)())
+  .shapePadding(10)
+  .scale(color);
+
 //! update function
 const update = data => {
   // update scale domain
   color.domain(data.map(d => d.name));
+
+  // update and call legend
+  legendGroup.call(legend);
+  legendGroup.selectAll('text').attr('fill', '#fff');
 
   // join enhanced (pie) data to path elements
   // feed data to pie to generate radians

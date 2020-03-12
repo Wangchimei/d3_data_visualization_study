@@ -17,6 +17,7 @@
   - [Scale](https://github.com/Wangchimei/d3_data_visualization_study#scale-%CE%B4)
   - [Axes](https://github.com/Wangchimei/d3_data_visualization_study#axes-%CE%B4)
   - [Animation](https://github.com/Wangchimei/d3_data_visualization_study#animation-%CE%B4)
+  - [Event](https://github.com/Wangchimei/d3_data_visualization_study#event-%CE%B4)
 
 - [D3 x Firebase (Real-time Database)](https://github.com/Wangchimei/d3_data_visualization_study#d3-x-firestore-real-time-database)
 
@@ -686,6 +687,21 @@ const widthTween = d => {
 
 [More about d3-transition](https://github.com/d3/d3-transition#api-reference)
 
+### Event [&#916;](https://github.com/Wangchimei/d3_data_visualization_study#table-of-content)
+
+D3 supports built-in events and custom events. We can bind an event listener to any DOM element using `d3.selection.on()` method.
+**Note: attach events after having enter section showing in the DOM**
+| Method | Description |
+| :------------------- | :----------------------------------------------------------------------------------------------------------------------------------- |
+| selection.on() | Adds or removes event listeners to capture event types like click, mouseover, mouseout etc. |
+| selection.dispatch() | Returns a new transition merging this transition with the specified other transition, which must have the same id as this transition |
+| d3.event | Event object to access standard event fields such as timestamp or methods like preventDefault |
+| d3.mouse(container) | Gets the x and y coordinates of the current mouse position in the specified DOM element. |
+| d3.touch() | Gets the touch coordinates to a container |
+
+```js
+```
+
 ## D3 x Firestore (Real-time Database)
 
 ### Retrieving Data [&#916;](https://github.com/Wangchimei/d3_data_visualization_study#table-of-content)
@@ -1006,7 +1022,7 @@ const pie = d3
 Let's pass in a set of dummy data, and see what `pie(data)` returns
 
 <div align="center">
-  <img src="https://i.imgur.com/7ydyQmF.png" height="150"/>
+  <img src="https://i.imgur.com/7ydyQmF.png" height="200"/>
 </div>
 
 It creates a startAngle, endAngle, and store the original data.
@@ -1179,4 +1195,29 @@ If we pass in what `pie(data)` created into `arc()` function, we will get a path
        .attrTween('d', arcTweenUpdate);
      ```
 
-6. Adding legend
+6. Adding legend using [d3 SVG Legend](https://d3-legend.susielu.com/)
+
+   ```js
+   const legendGroup = svg
+     .append('g')
+     .attr('transform', `translate(${dims.width + 40}, 10)`);
+
+   const legend = d3
+     .legendColor()
+     // .shape('circle')
+     .shape('path', d3.symbol().type(d3.symbolCircle)())
+     .shapePadding(10)
+     .scale(color);
+
+    const update = data => {
+      // update scale domain
+      color.domain(data.map(d => d.name));
+
+      // update and call legend
+      legendGroup.call(legend);
+      legendGroup.selectAll('text').attr('fill', '#fff');
+
+      **omitted**
+
+    }
+   ```
