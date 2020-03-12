@@ -12,7 +12,7 @@ const graph = svg
   .append('g')
   .attr('transform', `translate(${center.x}, ${center.y})`);
 
-//no sorting, generate angles based on the cost
+// no sorting, generate angles based on the cost
 // pie(data) will create a new array of data with angles attached
 const pie = d3
   .pie()
@@ -51,6 +51,19 @@ const legend = d3
   .shape('path', d3.symbol().type(d3.symbolCircle)())
   .shapePadding(10)
   .scale(color);
+
+// prepare and call tooltip
+const tip = d3
+  .tip()
+  .attr('class', 'tip card')
+  .html(d => {
+    let content = `<div class="name">${d.data.name}</div>`;
+    content += `<div class="cost">¥${d.data.cost}</div>`;
+    content += `<div class="delete">Double click to delete</div>`;
+    return content;
+  });
+
+graph.call(tip);
 
 //! update function
 const update = data => {
@@ -95,6 +108,20 @@ const update = data => {
     .transition()
     .duration(750)
     .attrTween('d', arcTweenEnter);
+
+  // add event listener
+  // show() takes 2 params: data, this element
+  graph
+    .selectAll('path')
+    .on('mouseover', (d, i, n) => {
+      tip.show(d, n[i]);
+      handleMouseOver(d, i, n);
+    })
+    .on('mouseleave', (d, i, n) => {
+      tip.hide();
+      handleMouseLeave(d, i, n);
+    })
+    .on('dblclick', handleDoubleClick);
 };
 
 //! connect to db
@@ -159,3 +186,27 @@ function arcTweenUpdate(d) {
     return arcPath(i(t));
   };
 }
+
+// event handlers
+// name the transition so that it does not interrupt the enter transition
+const handleMouseOver = (d, i, n) => {
+  // console.log(n[i]);
+  d3.select(n[i])
+    .transition('ChangeFill')
+    .duration(300)
+    .attr('fill', '#6699CC');
+};
+
+const handleMouseLeave = (d, i, n) => {
+  d3.select(n[i])
+    .transition('ChangeFill')
+    .duration(300)
+    .attr('fill', d => color(d.data.name));
+};
+
+const handleDoubleClick = d => {
+  const id = d.data.id;
+  db.collection('expenses')
+    .doc(id)
+    .delete();
+};

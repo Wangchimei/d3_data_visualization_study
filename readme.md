@@ -690,17 +690,41 @@ const widthTween = d => {
 ### Event [&#916;](https://github.com/Wangchimei/d3_data_visualization_study#table-of-content)
 
 D3 supports built-in events and custom events. We can bind an event listener to any DOM element using `d3.selection.on()` method.
-**Note: attach events after having enter section showing in the DOM**
-| Method | Description |
+
+| Method               | Description                                                                                                                          |
 | :------------------- | :----------------------------------------------------------------------------------------------------------------------------------- |
-| selection.on() | Adds or removes event listeners to capture event types like click, mouseover, mouseout etc. |
+| selection.on()       | Adds or removes event listeners to capture event types like click, mouseover, mouseout etc.                                          |
 | selection.dispatch() | Returns a new transition merging this transition with the specified other transition, which must have the same id as this transition |
-| d3.event | Event object to access standard event fields such as timestamp or methods like preventDefault |
-| d3.mouse(container) | Gets the x and y coordinates of the current mouse position in the specified DOM element. |
-| d3.touch() | Gets the touch coordinates to a container |
+| d3.event             | Event object to access standard event fields such as timestamp or methods like preventDefault                                        |
+| d3.mouse(container)  | Gets the x and y coordinates of the current mouse position in the specified DOM element.                                             |
+| d3.touch()           | Gets the touch coordinates to a container                                                                                            |
 
 ```js
+graph
+  .selectAll('path')
+  .on('mouseover', handleMouseOver)
+  .on('mouseleave', handleMouseLeave);
 ```
+
+```js
+const handleMouseOver = (d, i, n) => {
+  d3.select(n[i])
+    .transition('ChangeFill')
+    .duration(300)
+    .attr('fill', '#6699CC');
+};
+
+const handleMouseLeave = (d, i, n) => {
+  d3.select(n[i])
+    .transition('ChangeFill')
+    .duration(300)
+    .attr('fill', d => color(d.data.name));
+};
+```
+
+**Note 1:** attach events after having enter section showing in the DOM  
+**Note 2:** Name your transitions so that it does not interfere with others  
+**Note 3:** `n[i]` in arrow functions is equal to `this` in regular functions
 
 ## D3 x Firestore (Real-time Database)
 
@@ -1221,3 +1245,6 @@ If we pass in what `pie(data)` created into `arc()` function, we will get a path
 
     }
    ```
+
+7. (Additional) Event listeners, tooltip...wtc.
+   [tooltip](https://github.com/caged/d3-tip)
