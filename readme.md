@@ -28,8 +28,8 @@
   - [Methods Overview](https://github.com/Wangchimei/d3_data_visualization_study#methods-overview-%CE%B4)
   - [Break Down in Steps](https://github.com/Wangchimei/d3_data_visualization_study#break-down-in-steps-%CE%B4)
 - [Pie Chart](https://github.com/Wangchimei/d3_data_visualization_study#pie-chart-%CE%B4)
-  - [Methods Overview](https://github.com/Wangchimei/d3_data_visualization_study#methods-overview-1-%CE%B4)
-  - [Break Down in Steps](https://github.com/Wangchimei/d3_data_visualization_study#break-down-in-steps-1-%CE%B4)
+  - [Methods Overview](https://github.com/Wangchimei/d3_data_visualization_study#methods-overview-%CE%B4-1)
+  - [Break Down in Steps](https://github.com/Wangchimei/d3_data_visualization_study#break-down-in-steps-%CE%B4-1)
 
 ## SVG Basic [&#916;](https://github.com/Wangchimei/d3_data_visualization_study#table-of-content)
 
@@ -1035,7 +1035,7 @@ It is much more manageable to break our code in to three main sections in order 
 
 **Note:** 2 radians equals 360 degrees
 
-### d3.pie()
+#### d3.pie()
 
 `d3.pie()` takes in the data, calculates the start angle and end angle for each wedge of the pie chart, and generate a new array object, which contains original data (**example: access through `d.data.name`**).  
 These start and end angles can then be used later in `d3.arc()` to create actual paths for the wedges.
@@ -1055,7 +1055,7 @@ Let's pass in a set of dummy data, and see what `pie(data)` returns
 
 It creates a startAngle, endAngle, and store the original data.
 
-### d3.arc()
+#### d3.arc()
 
 `d3.arc()` generates paths that will create the pie's wedges.  
 Arcs need an **inner radius** and **outer radius**.  
