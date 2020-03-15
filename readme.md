@@ -30,6 +30,8 @@
 - [Pie Chart](https://github.com/Wangchimei/d3_data_visualization_study#pie-chart-%CE%B4)
   - [Methods Overview](https://github.com/Wangchimei/d3_data_visualization_study#methods-overview-%CE%B4-1)
   - [Break Down in Steps](https://github.com/Wangchimei/d3_data_visualization_study#break-down-in-steps-%CE%B4-1)
+- [Line Chart](https://github.com/Wangchimei/d3_data_visualization_study#line-chart-%CE%B4)
+  - [Break Down in Steps](https://github.com/Wangchimei/d3_data_visualization_study#break-down-in-steps-%CE%B4-2)
 
 ## SVG Basic [&#916;](https://github.com/Wangchimei/d3_data_visualization_study#table-of-content)
 
@@ -463,7 +465,7 @@ d3.json('./circles.json')
     // add attrs to circle already in the DOM
     circles
       .attr('cy', 200)
-      .attr('cx', d => d.distance)
+      .attr('cx', d => d.hours)
       .attr('r', d => d.radius)
       .attr('fill', d => d.fill);
 
@@ -472,7 +474,7 @@ d3.json('./circles.json')
       .enter()
       .append('circle')
       .attr('cy', 200)
-      .attr('cx', d => d.distance)
+      .attr('cx', d => d.hours)
       .attr('r', d => d.radius)
       .attr('fill', d => d.fill);
   })
@@ -1251,3 +1253,116 @@ If we pass in what `pie(data)` created into `arc()` function, we will get a path
    ```
 
 7. (Additional) Event listeners, [tooltip](https://github.com/caged/d3-tip)...etc.
+
+## Line Chart [&#916;](https://github.com/Wangchimei/d3_data_visualization_study#table-of-content)
+
+### Break Down in Steps [&#916;](https://github.com/Wangchimei/d3_data_visualization_study#table-of-content)
+
+1. Creating the SVG and dimensions
+
+   ```js
+   const margin = { top: 40, right: 20, bottom: 50, left: 100 };
+   const graphWidth = 560 - margin.right - margin.left;
+   const graphHeight = 400 - margin.top - margin.bottom;
+
+   const svg = d3
+     .select('.canvas')
+     .append('svg')
+     .attr('width', graphWidth + margin.right + margin.left)
+     .attr('height', graphHeight + margin.top + margin.bottom);
+
+   const graph = svg
+     .append('g')
+     .attr('width', graphWidth)
+     .attr('height', graphHeight)
+     .attr('transform', `translate(${margin.left}, ${margin.top})`);
+
+   // axes groups
+   const xAxisGroup = graph
+     .append('g')
+     .attr('class', 'x-axis')
+     .attr('transform', `translate(0, ${graphHeight})`);
+
+   const yAxisGroup = graph.append('g').attr('class', 'y-axis');
+   ```
+
+2. Setting up time scale(x) and linear scale(y)
+
+   ```js
+   const x = d3.scaleTime().range([0, graphWidth]);
+   const y = d3.scaleLinear().range([graphHeight, 0]);
+   ```
+
+3. Setting up line generator for line chart
+
+   ```js
+   // d3 line path generator
+   const line = d3
+     .line()
+     .x(function(d) {
+       return x(new Date(d.date));
+     })
+     .y(function(d) {
+       return y(d.hours);
+     });
+   // line path element
+   const path = graph.append('path');
+   ```
+
+4. Defining update function
+
+   ```js
+   const update = data => {
+     // sort data
+     data.sort((a, b) => {
+       new Date(a.date) - new Date(b.date);
+     });
+     // update domain
+     x.domain(d3.extent(data, d => new Date(d.date)));
+     y.domain([0, d3.max(data, d => d.hours)]);
+
+     // update line generator path data (data needs to be an array)
+     path
+       .data([data])
+       .attr('fill', 'none')
+       .attr('stroke', '#00bfa5')
+       .attr('stroke-width', '2')
+       .attr('d', line);
+
+     // create circle for objects
+     const circles = graph.selectAll('circle').data(data);
+
+     // remove from exit selection
+     circles.exit().remove();
+
+     // update existing circles
+     circles.attr('cx', d => x(new Date(d.date))).attr('cy', d => y(d.hours));
+
+     // add from enter selection
+     circles
+       .enter()
+       .append('circle')
+       .attr('r', '4')
+       .attr('cx', d => x(new Date(d.date)))
+       .attr('cy', d => y(d.hours))
+       .attr('fill', '#ccc');
+
+     // create and call axes
+     const xAxis = d3
+       .axisBottom(x)
+       .ticks(5)
+       .tickFormat(d3.timeFormat('%b %d'));
+
+     const yAxis = d3
+       .axisLeft(y)
+       .ticks(4)
+       .tickFormat(d => d + 'hr');
+
+     xAxisGroup.call(xAxis);
+     yAxisGroup.call(yAxis);
+   };
+   ```
+
+5. Getting data (same as in bar chart section)
+
+6. (Additional) dotted lines, event listeners, [tooltip](https://github.com/caged/d3-tip)...etc.
